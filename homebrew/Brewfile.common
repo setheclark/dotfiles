@@ -64,7 +64,7 @@ brew "pre-commit"               # Git hook framework
 # CLI Tools - Secrets & Security
 # -----------------------------------------------------------------------------
 
-brew "1password-cli"            # 1Password CLI for secrets management
+cask "1password-cli"            # 1Password CLI for secrets management
 brew "gnupg"                    # GNU Privacy Guard for encryption
 brew "age"                      # Simple, modern file encryption
 
