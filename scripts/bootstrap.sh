@@ -41,34 +41,6 @@ OS=$(detect_os)
 info "Detected OS: $OS"
 
 # -----------------------------------------------------------------------------
-# Ask for machine profile and save it
-# -----------------------------------------------------------------------------
-ask_machine_profile() {
-    echo ""
-    echo -e "${BLUE}Which machine profile should be used?${NC}"
-    echo ""
-    echo "  1) macos-personal  - Personal MacBook"
-    echo "  2) macos-work      - Work MacBook"
-    echo "  3) linux           - Linux machine (Omarchy)"
-    echo ""
-
-    while true; do
-        read -p "Enter choice [1-3]: " choice < /dev/tty
-        case $choice in
-            1) DOTFILES_MACHINE="macos-personal"; break ;;
-            2) DOTFILES_MACHINE="macos-work"; break ;;
-            3) DOTFILES_MACHINE="linux"; break ;;
-            *) echo "Please enter 1, 2, or 3" ;;
-        esac
-    done
-
-    # Save to file for future use
-    echo "$DOTFILES_MACHINE" > "$HOME/.dotfiles-machine"
-    success "Saved profile: $DOTFILES_MACHINE"
-    export DOTFILES_MACHINE
-}
-
-# -----------------------------------------------------------------------------
 # macOS: Install Xcode Command Line Tools
 # -----------------------------------------------------------------------------
 install_xcode_cli() {
@@ -238,8 +210,6 @@ main() {
     echo -e "${BLUE}║        Dotfiles Bootstrap Script       ║${NC}"
     echo -e "${BLUE}╚════════════════════════════════════════╝${NC}"
     echo ""
-
-    ask_machine_profile
 
     if [[ "$OS" == "macos" ]]; then
         install_xcode_cli
