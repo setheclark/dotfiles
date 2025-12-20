@@ -53,7 +53,7 @@ ask_machine_profile() {
     echo ""
 
     while true; do
-        read -p "Enter choice [1-3]: " choice
+        read -p "Enter choice [1-3]: " choice < /dev/tty
         case $choice in
             1) DOTFILES_MACHINE="macos-personal"; break ;;
             2) DOTFILES_MACHINE="macos-work"; break ;;
