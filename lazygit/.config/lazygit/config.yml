@@ -1,0 +1,60 @@
+# =============================================================================
+# lazygit configuration
+# https://github.com/jesseduffield/lazygit
+# Theme: Catppuccin Frappe
+# =============================================================================
+
+gui:
+  # Catppuccin Frappe theme
+  # https://github.com/catppuccin/lazygit
+  theme:
+    activeBorderColor:
+      - "#a6d189"  # green
+      - bold
+    inactiveBorderColor:
+      - "#838ba7"  # overlay1
+    optionsTextColor:
+      - "#8caaee"  # blue
+    selectedLineBgColor:
+      - "#414559"  # surface0
+    cherryPickedCommitBgColor:
+      - "#51576d"  # surface1
+    cherryPickedCommitFgColor:
+      - "#ca9ee6"  # mauve
+    unstagedChangesColor:
+      - "#e78284"  # red
+    defaultFgColor:
+      - "#c6d0f5"  # text
+    searchingActiveBorderColor:
+      - "#e5c890"  # yellow
+
+  # Show file icons (requires nerd font)
+  showFileIcons: true
+
+  # Mouse support
+  mouseEvents: true
+
+  # Border style
+  border: rounded
+
+git:
+  # Auto fetch interval in seconds (0 = disabled)
+  autoFetch: true
+  autoFetchInterval: 120
+
+  # Pull with rebase
+  pull:
+    mode: rebase
+
+  # Sign off commits
+  # signOff: true
+
+os:
+  # Open files with default editor
+  editPreset: "nvim"
+
+# Keybindings (defaults are fine, customize here if needed)
+keybinding:
+  universal:
+    quit: "q"
+    quit-alt1: "<c-c>"

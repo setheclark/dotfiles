@@ -1,0 +1,130 @@
+#!/bin/bash
+# =============================================================================
+# Sketchybar Configuration
+# =============================================================================
+# https://felixkratz.github.io/SketchyBar/
+
+source "$CONFIG_DIR/colors.sh"
+
+PLUGIN_DIR="$CONFIG_DIR/plugins"
+FONT="JetBrainsMono Nerd Font"
+
+# -----------------------------------------------------------------------------
+# Bar Appearance
+# -----------------------------------------------------------------------------
+
+sketchybar --bar \
+    position=top \
+    height=32 \
+    blur_radius=30 \
+    color="$BAR_COLOR" \
+    shadow=off \
+    sticky=on \
+    padding_left=10 \
+    padding_right=10 \
+    notch_width=188 \
+    margin=0 \
+    y_offset=0 \
+    corner_radius=0
+
+# -----------------------------------------------------------------------------
+# Default Item Settings
+# -----------------------------------------------------------------------------
+
+sketchybar --default \
+    icon.font="$FONT:Bold:14.0" \
+    icon.color="$ICON_COLOR" \
+    icon.padding_left=4 \
+    icon.padding_right=4 \
+    label.font="$FONT:Medium:12.0" \
+    label.color="$LABEL_COLOR" \
+    label.padding_left=4 \
+    label.padding_right=4 \
+    background.color="$SURFACE0" \
+    background.corner_radius=5 \
+    background.height=24 \
+    background.padding_left=5 \
+    background.padding_right=5
+
+# -----------------------------------------------------------------------------
+# Left Items
+# -----------------------------------------------------------------------------
+
+# Aerospace workspaces
+for i in {1..9}; do
+    sketchybar --add item space.$i left \
+        --set space.$i \
+            associated_space=$i \
+            icon="$i" \
+            icon.padding_left=8 \
+            icon.padding_right=8 \
+            background.color="$SURFACE0" \
+            background.corner_radius=5 \
+            background.height=24 \
+            script="$PLUGIN_DIR/space.sh" \
+        --subscribe space.$i space_change
+done
+
+# Separator
+sketchybar --add item separator left \
+    --set separator \
+        icon="" \
+        icon.color="$SURFACE1" \
+        icon.padding_left=4 \
+        background.drawing=off
+
+# Front app (currently focused application)
+sketchybar --add item front_app left \
+    --set front_app \
+        icon.drawing=off \
+        label.font="$FONT:Bold:12.0" \
+        script="$PLUGIN_DIR/front_app.sh" \
+        background.drawing=off \
+    --subscribe front_app front_app_switched
+
+# -----------------------------------------------------------------------------
+# Center Items
+# -----------------------------------------------------------------------------
+
+# Currently empty - add items here if desired
+
+# -----------------------------------------------------------------------------
+# Right Items
+# -----------------------------------------------------------------------------
+
+# Clock
+sketchybar --add item clock right \
+    --set clock \
+        icon="" \
+        icon.color="$BLUE" \
+        update_freq=30 \
+        script="$PLUGIN_DIR/clock.sh"
+
+# Battery
+sketchybar --add item battery right \
+    --set battery \
+        update_freq=120 \
+        script="$PLUGIN_DIR/battery.sh" \
+    --subscribe battery system_woke power_source_change
+
+# Volume
+sketchybar --add item volume right \
+    --set volume \
+        icon.color="$TEAL" \
+        script="$PLUGIN_DIR/volume.sh" \
+    --subscribe volume volume_change
+
+# WiFi
+sketchybar --add item wifi right \
+    --set wifi \
+        icon="" \
+        icon.color="$SAPPHIRE" \
+        script="$PLUGIN_DIR/wifi.sh" \
+    --subscribe wifi wifi_change
+
+# -----------------------------------------------------------------------------
+# Finalize
+# -----------------------------------------------------------------------------
+
+sketchybar --hotload on
+sketchybar --update

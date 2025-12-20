@@ -1,0 +1,22 @@
+# =============================================================================
+# Stow local ignore - files/directories NOT to stow
+# =============================================================================
+
+# Repository files
+\.git
+\.gitignore
+\.stow-local-ignore
+README\.md
+LICENSE
+
+# Non-stowable directories
+scripts
+homebrew
+local
+
+# macOS
+\.DS_Store
+
+# Editor files
+\.vscode
+\.idea

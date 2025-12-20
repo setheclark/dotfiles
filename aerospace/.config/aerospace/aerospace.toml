@@ -1,0 +1,209 @@
+# =============================================================================
+# Aerospace Configuration
+# =============================================================================
+# Tiling window manager for macOS
+# https://github.com/nikitabobko/AeroSpace
+
+# -----------------------------------------------------------------------------
+# General Settings
+# -----------------------------------------------------------------------------
+
+# Start Aerospace at login
+start-at-login = true
+
+# Normalizations - auto-adjust window behavior
+enable-normalization-flatten-containers = true
+enable-normalization-opposite-orientation-for-nested-containers = true
+
+# Mouse follows focus
+on-focus-changed = ['move-mouse window-lazy-center']
+
+# -----------------------------------------------------------------------------
+# Layout Settings
+# -----------------------------------------------------------------------------
+
+# Default layout: BSP (binary space partitioning)
+# Options: tiles, accordion
+default-root-container-layout = 'tiles'
+
+# Horizontal vs vertical split for new windows
+default-root-container-orientation = 'auto'
+
+# When new window opens, focus it
+on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+
+# -----------------------------------------------------------------------------
+# Gaps and Padding
+# -----------------------------------------------------------------------------
+
+[gaps]
+# Gap between windows
+inner.horizontal = 10
+inner.vertical = 10
+
+# Gap between windows and screen edges
+outer.left = 10
+outer.right = 10
+outer.top = 10
+outer.bottom = 10
+
+# -----------------------------------------------------------------------------
+# Key Bindings
+# -----------------------------------------------------------------------------
+# Using Alt (Option) as the main modifier to avoid conflicts
+# Shift added for window movement actions
+
+[mode.main.binding]
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Focus Navigation (Alt + hjkl)
+# ─────────────────────────────────────────────────────────────────────────────
+
+alt-h = 'focus left'
+alt-j = 'focus down'
+alt-k = 'focus up'
+alt-l = 'focus right'
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Move Windows (Alt + Shift + hjkl)
+# ─────────────────────────────────────────────────────────────────────────────
+
+alt-shift-h = 'move left'
+alt-shift-j = 'move down'
+alt-shift-k = 'move up'
+alt-shift-l = 'move right'
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Resize Windows (Alt + Ctrl + hjkl)
+# ─────────────────────────────────────────────────────────────────────────────
+
+alt-ctrl-h = 'resize width -50'
+alt-ctrl-j = 'resize height +50'
+alt-ctrl-k = 'resize height -50'
+alt-ctrl-l = 'resize width +50'
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Workspace Navigation (Alt + 1-9)
+# ─────────────────────────────────────────────────────────────────────────────
+
+alt-1 = 'workspace 1'
+alt-2 = 'workspace 2'
+alt-3 = 'workspace 3'
+alt-4 = 'workspace 4'
+alt-5 = 'workspace 5'
+alt-6 = 'workspace 6'
+alt-7 = 'workspace 7'
+alt-8 = 'workspace 8'
+alt-9 = 'workspace 9'
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Move Window to Workspace (Alt + Shift + 1-9)
+# ─────────────────────────────────────────────────────────────────────────────
+
+alt-shift-1 = 'move-node-to-workspace 1'
+alt-shift-2 = 'move-node-to-workspace 2'
+alt-shift-3 = 'move-node-to-workspace 3'
+alt-shift-4 = 'move-node-to-workspace 4'
+alt-shift-5 = 'move-node-to-workspace 5'
+alt-shift-6 = 'move-node-to-workspace 6'
+alt-shift-7 = 'move-node-to-workspace 7'
+alt-shift-8 = 'move-node-to-workspace 8'
+alt-shift-9 = 'move-node-to-workspace 9'
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Layout Controls
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Toggle between horizontal and vertical split
+alt-slash = 'layout tiles horizontal vertical'
+
+# Toggle accordion (stacked) layout
+alt-comma = 'layout accordion horizontal vertical'
+
+# Toggle floating for current window
+alt-shift-space = 'layout floating tiling'
+
+# Toggle fullscreen for current window
+alt-f = 'fullscreen'
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Split Controls
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Set split direction for next window
+alt-v = 'split horizontal'
+alt-s = 'split vertical'
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Monitor Navigation
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Focus next/previous monitor
+alt-tab = 'focus-monitor next'
+alt-shift-tab = 'focus-monitor prev'
+
+# Move window to next/previous monitor
+alt-shift-m = 'move-node-to-monitor next'
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Service Mode (for reloading config, etc.)
+# ─────────────────────────────────────────────────────────────────────────────
+
+alt-shift-semicolon = 'mode service'
+
+[mode.service.binding]
+esc = ['reload-config', 'mode main']
+r = ['flatten-workspace-tree', 'mode main']
+alt-shift-semicolon = 'mode main'
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Quick Actions
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Close window
+alt-q = 'close'
+
+# Balance window sizes
+alt-shift-e = 'balance-sizes'
+
+# Join with adjacent window
+alt-shift-j = 'join-with down'
+
+# -----------------------------------------------------------------------------
+# Window Rules
+# -----------------------------------------------------------------------------
+# Float specific applications that don't work well tiled
+
+[[on-window-detected]]
+if.app-id = 'com.apple.systempreferences'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.finder'
+if.window-title-regex-substring = 'Copy|Move|Delete|Connecting'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.1password.1password'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.raycast.macos'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.calculator'
+run = 'layout floating'
+
+# -----------------------------------------------------------------------------
+# Workspace Assignments (Optional)
+# -----------------------------------------------------------------------------
+# Uncomment and customize to auto-assign apps to workspaces
+
+# [[on-window-detected]]
+# if.app-id = 'com.apple.mail'
+# run = 'move-node-to-workspace 3'
+
+# [[on-window-detected]]
+# if.app-id = 'com.tinyspeck.slackmacgap'
+# run = 'move-node-to-workspace 4'

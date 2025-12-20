@@ -1,0 +1,147 @@
+# =============================================================================
+# Homebrew Brewfile - Common packages for all macOS machines
+# =============================================================================
+# Install with: brew bundle --file=Brewfile.common
+
+# -----------------------------------------------------------------------------
+# Taps (repositories)
+# -----------------------------------------------------------------------------
+
+tap "homebrew/bundle"           # Brewfile support
+tap "homebrew/cask-fonts"       # Nerd fonts and other fonts
+
+# -----------------------------------------------------------------------------
+# CLI Tools - Core
+# -----------------------------------------------------------------------------
+
+brew "stow"                     # Symlink farm manager for dotfiles
+brew "git"                      # Version control (newer than system git)
+brew "gh"                       # GitHub CLI for issues, PRs, and more
+brew "neovim"                   # Modern vim-based editor
+
+# -----------------------------------------------------------------------------
+# CLI Tools - Shell & Prompt
+# -----------------------------------------------------------------------------
+
+brew "zsh"                      # Z shell (newer than system zsh)
+brew "starship"                 # Cross-shell customizable prompt
+brew "zsh-autosuggestions"      # Fish-like autosuggestions for zsh
+brew "zsh-syntax-highlighting"  # Syntax highlighting for zsh commands
+
+# -----------------------------------------------------------------------------
+# CLI Tools - Modern replacements
+# -----------------------------------------------------------------------------
+
+brew "eza"                      # Modern replacement for ls (colors, git status)
+brew "bat"                      # Cat clone with syntax highlighting and git
+brew "ripgrep"                  # Fast grep alternative (rg)
+brew "fd"                       # Fast and user-friendly find alternative
+brew "fzf"                      # Fuzzy finder for files, history, and more
+brew "zoxide"                   # Smarter cd command that learns your habits
+brew "delta"                    # Better git diffs with syntax highlighting
+brew "htop"                     # Interactive process viewer (better top)
+brew "dust"                     # Intuitive disk usage (better du)
+brew "duf"                      # Disk usage overview (better df)
+brew "procs"                    # Modern replacement for ps
+brew "sd"                       # Intuitive find & replace (better sed)
+
+# -----------------------------------------------------------------------------
+# CLI Tools - Development
+# -----------------------------------------------------------------------------
+
+brew "jq"                       # JSON processor for the command line
+brew "yq"                       # YAML/XML/TOML processor (jq for YAML)
+brew "httpie"                   # User-friendly HTTP client (better curl)
+brew "curl"                     # HTTP client (newer than system curl)
+brew "wget"                     # Download files from the web
+brew "tree"                     # Display directory tree structure
+brew "watch"                    # Run commands periodically
+brew "tmux"                     # Terminal multiplexer
+brew "lazygit"                  # Terminal UI for git commands
+brew "pre-commit"               # Git hook framework
+
+# -----------------------------------------------------------------------------
+# CLI Tools - Secrets & Security
+# -----------------------------------------------------------------------------
+
+brew "1password-cli"            # 1Password CLI for secrets management
+brew "gnupg"                    # GNU Privacy Guard for encryption
+brew "age"                      # Simple, modern file encryption
+
+# -----------------------------------------------------------------------------
+# CLI Tools - Media
+# -----------------------------------------------------------------------------
+
+brew "ffmpeg"                   # Audio/video converter and streamer
+brew "imagemagick"              # Image manipulation tools
+
+# -----------------------------------------------------------------------------
+# Development - Languages & Runtimes
+# -----------------------------------------------------------------------------
+
+brew "python"                   # Python 3 (latest stable)
+brew "node"                     # Node.js JavaScript runtime
+brew "go"                       # Go programming language
+brew "kotlin"                   # Kotlin programming language
+brew "gradle"                   # Build automation tool (for Kotlin/Java)
+
+# -----------------------------------------------------------------------------
+# Cask Fonts
+# -----------------------------------------------------------------------------
+
+cask "font-jetbrains-mono-nerd-font"  # JetBrains Mono with Nerd Font icons
+cask "font-fira-code-nerd-font"       # Fira Code with Nerd Font icons
+cask "font-meslo-lg-nerd-font"        # Meslo with Nerd Font icons
+
+# -----------------------------------------------------------------------------
+# Applications - Terminal
+# -----------------------------------------------------------------------------
+
+cask "ghostty"                  # Fast, native terminal emulator
+
+# -----------------------------------------------------------------------------
+# Applications - Development
+# -----------------------------------------------------------------------------
+
+cask "visual-studio-code"       # Code editor (complement to neovim)
+cask "jetbrains-toolbox"        # Manage JetBrains IDEs (IntelliJ, Android Studio, etc.)
+
+# -----------------------------------------------------------------------------
+# Applications - Communication
+# -----------------------------------------------------------------------------
+
+cask "slack"                    # Team communication
+
+# -----------------------------------------------------------------------------
+# Applications - Productivity
+# -----------------------------------------------------------------------------
+
+cask "obsidian"                 # Markdown knowledge base
+
+# -----------------------------------------------------------------------------
+# Applications - Media
+# -----------------------------------------------------------------------------
+
+cask "vlc"                      # Media player
+
+# -----------------------------------------------------------------------------
+# Applications - Browsers
+# -----------------------------------------------------------------------------
+
+cask "firefox"                  # Firefox browser
+
+# -----------------------------------------------------------------------------
+# Applications - Utilities
+# -----------------------------------------------------------------------------
+
+cask "raycast"                  # Spotlight replacement with extensions
+cask "1password"                # Password manager
+
+# -----------------------------------------------------------------------------
+# Window Management & Desktop Customization
+# -----------------------------------------------------------------------------
+
+cask "aerospace"                # Tiling window manager (i3/Hyprland-like)
+brew "sketchybar"               # Customizable menu bar replacement
+brew "borders"                  # Window border highlighting (JankyBorders)
+cask "karabiner-elements"       # Keyboard customization and remapping

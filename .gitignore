@@ -1,0 +1,75 @@
+# =============================================================================
+# Dotfiles repository gitignore
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Local override files (machine-specific, contain secrets)
+# -----------------------------------------------------------------------------
+
+# These are created from templates but should never be committed
+*.local
+*.local.*
+!*.local.example
+
+# Machine profile marker
+.dotfiles-machine
+
+# -----------------------------------------------------------------------------
+# SSH (never commit keys or sensitive configs)
+# -----------------------------------------------------------------------------
+
+# Private keys
+ssh/.ssh/id_*
+ssh/.ssh/*.pem
+ssh/.ssh/*.key
+!ssh/.ssh/*.pub
+
+# Known hosts and authorized keys
+ssh/.ssh/known_hosts
+ssh/.ssh/authorized_keys
+
+# Local config (machine-specific hosts)
+ssh/.ssh/config.local
+
+# Sockets directory
+ssh/.ssh/sockets/
+
+# -----------------------------------------------------------------------------
+# macOS
+# -----------------------------------------------------------------------------
+
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+# -----------------------------------------------------------------------------
+# Editors
+# -----------------------------------------------------------------------------
+
+# Vim
+*.swp
+*.swo
+*~
+
+# VS Code
+.vscode/
+
+# JetBrains
+.idea/
+
+# -----------------------------------------------------------------------------
+# Misc
+# -----------------------------------------------------------------------------
+
+# Backup files
+*.bak
+*.backup
+*.orig
+
+# Logs
+*.log
+
+# Temporary files
+tmp/
+temp/

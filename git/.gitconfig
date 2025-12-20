@@ -1,0 +1,200 @@
+# =============================================================================
+# Git configuration
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# User identity (loaded from local file)
+# -----------------------------------------------------------------------------
+
+# NOTE: Name and email are set in ~/.gitconfig.local
+# This allows different identities on different machines
+# Work-specific config (if configured) is conditionally included via ~/.gitconfig.local
+
+[include]
+    path = ~/.gitconfig.local
+
+# -----------------------------------------------------------------------------
+# Core settings
+# -----------------------------------------------------------------------------
+
+[core]
+    editor = nvim
+    pager = delta
+    excludesfile = ~/.config/git/ignore
+    # Prevent issues with file mode changes
+    fileMode = false
+    # Handle line endings
+    autocrlf = input
+    # Speed up commands involving untracked files
+    untrackedCache = true
+
+# -----------------------------------------------------------------------------
+# Init
+# -----------------------------------------------------------------------------
+
+[init]
+    defaultBranch = main
+
+# -----------------------------------------------------------------------------
+# Colors
+# -----------------------------------------------------------------------------
+
+[color]
+    ui = auto
+
+# -----------------------------------------------------------------------------
+# Diff and merge
+# -----------------------------------------------------------------------------
+
+[diff]
+    colorMoved = default
+    algorithm = histogram
+
+[merge]
+    conflictstyle = diff3
+
+# Delta configuration (better diffs) - Catppuccin Frappe theme
+[delta]
+    navigate = true
+    side-by-side = true
+    line-numbers = true
+    syntax-theme = Catppuccin Frappe
+    minus-style = syntax "#53394c"
+    minus-emph-style = syntax "#894255"
+    plus-style = syntax "#40493e"
+    plus-emph-style = syntax "#5e7349"
+    map-styles = bold purple => syntax "#51456c", bold cyan => syntax "#3b5360"
+    line-numbers-minus-style = "#e78284"
+    line-numbers-plus-style = "#a6d189"
+    line-numbers-zero-style = "#838ba7"
+
+[interactive]
+    diffFilter = delta --color-only
+
+# -----------------------------------------------------------------------------
+# Pull/Push behavior
+# -----------------------------------------------------------------------------
+
+[pull]
+    rebase = true
+
+[push]
+    default = current
+    autoSetupRemote = true
+    followTags = true
+
+[fetch]
+    prune = true
+    pruneTags = true
+
+# -----------------------------------------------------------------------------
+# Rebase
+# -----------------------------------------------------------------------------
+
+[rebase]
+    autoStash = true
+    autoSquash = true
+
+# -----------------------------------------------------------------------------
+# Branch
+# -----------------------------------------------------------------------------
+
+[branch]
+    sort = -committerdate
+
+# -----------------------------------------------------------------------------
+# Aliases
+# -----------------------------------------------------------------------------
+
+[alias]
+    # Status
+    s = status -s
+    st = status
+
+    # Commits
+    c = commit
+    cm = commit -m
+    ca = commit --amend
+    can = commit --amend --no-edit
+
+    # Add
+    a = add
+    aa = add --all
+    ap = add --patch
+
+    # Diff
+    d = diff
+    ds = diff --staged
+    dc = diff --cached
+
+    # Checkout/Switch
+    co = checkout
+    sw = switch
+    sc = switch -c
+
+    # Branch
+    b = branch
+    ba = branch -a
+    bd = branch -d
+    bD = branch -D
+
+    # Pull/Push
+    p = push
+    pf = push --force-with-lease
+    pl = pull
+
+    # Log
+    l = log --oneline -20
+    lg = log --oneline --graph --decorate
+    ll = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    last = log -1 HEAD --stat
+
+    # Stash
+    ss = stash
+    sp = stash pop
+    sl = stash list
+    sd = stash drop
+
+    # Reset
+    unstage = reset HEAD --
+    undo = reset --soft HEAD~1
+
+    # Remote
+    r = remote -v
+
+    # Misc
+    aliases = config --get-regexp alias
+    contributors = shortlog --summary --numbered
+    today = log --since=midnight --author='$(git config user.email)' --oneline
+    wip = !git add -A && git commit -m 'WIP'
+    unwip = reset HEAD~1
+
+    # Clean merged branches
+    cleanup = "!git branch --merged | grep -v '\\*\\|main\\|master' | xargs -n 1 git branch -d"
+
+# -----------------------------------------------------------------------------
+# URL shortcuts
+# -----------------------------------------------------------------------------
+
+[url "git@github.com:"]
+    insteadOf = gh:
+
+[url "git@gitlab.com:"]
+    insteadOf = gl:
+
+# -----------------------------------------------------------------------------
+# GitHub CLI
+# -----------------------------------------------------------------------------
+
+[credential "https://github.com"]
+    helper = !gh auth git-credential
+
+[credential "https://gist.github.com"]
+    helper = !gh auth git-credential
+
+# -----------------------------------------------------------------------------
+# Rerere (reuse recorded resolution)
+# -----------------------------------------------------------------------------
+
+[rerere]
+    enabled = true

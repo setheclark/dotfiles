@@ -1,0 +1,68 @@
+# =============================================================================
+# Local zsh configuration - Machine-specific settings
+# =============================================================================
+#
+# This file is sourced at the end of .zshrc and is NOT tracked by git.
+# Copy this to ~/.zshrc.local and customize for this specific machine.
+#
+# Use this file for:
+# - Machine-specific PATH additions
+# - Work-specific environment variables
+# - Corporate proxy settings
+# - Credentials and secrets (or use 1Password CLI)
+# - Machine-specific aliases
+
+# -----------------------------------------------------------------------------
+# Machine-specific PATH
+# -----------------------------------------------------------------------------
+
+# Example: Add custom tool paths
+# export PATH="/opt/custom-tools/bin:$PATH"
+
+# Example: Work-specific SDK path
+# export PATH="$HOME/work-sdk/bin:$PATH"
+
+# -----------------------------------------------------------------------------
+# Environment Variables
+# -----------------------------------------------------------------------------
+
+# Example: Set a custom editor for this machine
+# export EDITOR="code --wait"
+
+# Example: Work proxy settings
+# export HTTP_PROXY="http://proxy.work.com:8080"
+# export HTTPS_PROXY="http://proxy.work.com:8080"
+# export NO_PROXY="localhost,127.0.0.1,.work.com"
+
+# -----------------------------------------------------------------------------
+# Secrets (prefer 1Password CLI when possible)
+# -----------------------------------------------------------------------------
+
+# Example: API tokens (consider using 1Password instead)
+# export GITHUB_TOKEN="your-token-here"
+
+# Example: Using 1Password CLI to load secrets
+# if command -v op &>/dev/null && op account list &>/dev/null 2>&1; then
+#     export OPENAI_API_KEY=$(op read "op://Personal/OpenAI/api-key")
+# fi
+
+# -----------------------------------------------------------------------------
+# Machine-specific aliases
+# -----------------------------------------------------------------------------
+
+# Example: Work-specific project shortcuts
+# alias proj="cd ~/work/main-project"
+# alias vpn="open /Applications/Corporate\ VPN.app"
+
+# -----------------------------------------------------------------------------
+# Work-specific settings
+# -----------------------------------------------------------------------------
+
+# Uncomment if this is a work machine
+# export DOTFILES_WORK=1
+
+# Example: Corporate npm registry
+# npm config set registry https://npm.corp.com/
+
+# Example: Work git configuration
+# git config --global http.proxy http://proxy.work.com:8080

@@ -1,0 +1,191 @@
+# =============================================================================
+# Starship prompt configuration
+# https://starship.rs/config/
+# Theme: Catppuccin Frappe
+# =============================================================================
+
+# Use Catppuccin Frappe palette
+palette = "catppuccin_frappe"
+
+# Timeout for commands (in milliseconds)
+command_timeout = 1000
+
+# Add a blank line before the prompt
+add_newline = true
+
+# Prompt format
+format = """
+$username\
+$hostname\
+$directory\
+$git_branch\
+$git_status\
+$git_state\
+$kotlin\
+$java\
+$python\
+$nodejs\
+$rust\
+$golang\
+$cmd_duration\
+$line_break\
+$character"""
+
+# -----------------------------------------------------------------------------
+# Directory
+# -----------------------------------------------------------------------------
+
+[directory]
+truncation_length = 4
+truncation_symbol = ".../"
+truncate_to_repo = true
+style = "bold sapphire"
+
+# Substitutions for cleaner paths
+[directory.substitutions]
+"Documents" = "docs"
+"Downloads" = "dl"
+"Desktop" = "dt"
+
+# -----------------------------------------------------------------------------
+# Git
+# -----------------------------------------------------------------------------
+
+[git_branch]
+symbol = " "
+style = "bold mauve"
+format = "[$symbol$branch]($style) "
+
+[git_status]
+format = '([$all_status$ahead_behind]($style) )'
+style = "bold red"
+conflicted = "="
+ahead = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+untracked = "?${count}"
+stashed = "$${count}"
+modified = "!${count}"
+staged = "+${count}"
+renamed = "»${count}"
+deleted = "✘${count}"
+
+[git_state]
+format = '\([$state( $progress_current/$progress_total)]($style)\) '
+style = "bold yellow"
+
+# -----------------------------------------------------------------------------
+# Languages and tools
+# -----------------------------------------------------------------------------
+
+[kotlin]
+symbol = " "
+style = "bold blue"
+format = "[$symbol($version )]($style)"
+
+[java]
+symbol = " "
+style = "bold maroon"
+format = "[$symbol($version )]($style)"
+
+[python]
+symbol = " "
+style = "bold yellow"
+format = "[$symbol$pyenv_prefix($version )($virtualenv )]($style)"
+
+[nodejs]
+symbol = " "
+style = "bold green"
+format = "[$symbol($version )]($style)"
+
+[rust]
+symbol = " "
+style = "bold peach"
+format = "[$symbol($version )]($style)"
+
+[golang]
+symbol = " "
+style = "bold sky"
+format = "[$symbol($version )]($style)"
+
+# -----------------------------------------------------------------------------
+# Command duration
+# -----------------------------------------------------------------------------
+
+[cmd_duration]
+min_time = 2000  # Show if command takes longer than 2 seconds
+format = "took [$duration]($style) "
+style = "bold yellow"
+
+# -----------------------------------------------------------------------------
+# Character (prompt symbol)
+# -----------------------------------------------------------------------------
+
+[character]
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"
+vimcmd_symbol = "[❮](bold green)"
+
+# -----------------------------------------------------------------------------
+# Username and hostname (show when SSH or root)
+# -----------------------------------------------------------------------------
+
+[username]
+show_always = false
+format = "[$user]($style)@"
+style_user = "bold blue"
+style_root = "bold red"
+
+[hostname]
+ssh_only = true
+format = "[$hostname]($style) "
+style = "bold green"
+
+# -----------------------------------------------------------------------------
+# Disabled modules (for speed)
+# -----------------------------------------------------------------------------
+
+[aws]
+disabled = true
+
+[gcloud]
+disabled = true
+
+[azure]
+disabled = true
+
+[package]
+disabled = true
+
+# -----------------------------------------------------------------------------
+# Catppuccin Frappe Palette
+# https://github.com/catppuccin/starship
+# -----------------------------------------------------------------------------
+
+[palettes.catppuccin_frappe]
+rosewater = "#f2d5cf"
+flamingo = "#eebebe"
+pink = "#f4b8e4"
+mauve = "#ca9ee6"
+red = "#e78284"
+maroon = "#ea999c"
+peach = "#ef9f76"
+yellow = "#e5c890"
+green = "#a6d189"
+teal = "#81c8be"
+sky = "#99d1db"
+sapphire = "#85c1dc"
+blue = "#8caaee"
+lavender = "#babbf1"
+text = "#c6d0f5"
+subtext1 = "#b5bfe2"
+subtext0 = "#a5adce"
+overlay2 = "#949cbb"
+overlay1 = "#838ba7"
+overlay0 = "#737994"
+surface2 = "#626880"
+surface1 = "#51576d"
+surface0 = "#414559"
+base = "#303446"
+mantle = "#292c3c"
+crust = "#232634"

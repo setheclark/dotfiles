@@ -1,0 +1,22 @@
+# =============================================================================
+# bat configuration
+# https://github.com/sharkdp/bat
+# Theme: Catppuccin Frappe
+# =============================================================================
+
+# Use Catppuccin Frappe theme
+# Install with: bat cache --build (after adding theme to ~/.config/bat/themes/)
+# Or use the built-in theme that's closest: base16
+--theme="Catppuccin Frappe"
+
+# Show line numbers
+--style="numbers,changes,header"
+
+# Use italic text
+--italic-text=always
+
+# Set tab width
+--tabs=4
+
+# Enable mouse scrolling in less pager
+--pager="less -FR"

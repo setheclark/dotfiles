@@ -1,0 +1,23 @@
+#!/bin/bash
+# =============================================================================
+# JankyBorders Configuration
+# =============================================================================
+# Window border highlighting for macOS
+# https://github.com/FelixKratz/JankyBorders
+#
+# Catppuccin Frappe color palette:
+# - Lavender:  #babbf1 (accent)
+# - Surface0:  #414559 (muted)
+# - Base:      #303446 (background)
+
+# Border options
+options=(
+    style=round
+    width=2.0
+    hidpi=on
+    active_color=0xffbabbf1
+    inactive_color=0xff414559
+)
+
+# Start borders with options
+borders "${options[@]}"

@@ -1,0 +1,33 @@
+# =============================================================================
+# Homebrew Brewfile - Work machine packages
+# =============================================================================
+# Install with: brew bundle --file=Brewfile.work
+#
+# NOTE: Some corporate software may be managed by IT and installed separately.
+# This file contains development tools commonly needed for work.
+
+# -----------------------------------------------------------------------------
+# CLI Tools - Work specific
+# -----------------------------------------------------------------------------
+
+# Add work-specific CLI tools here as needed
+# Examples:
+# brew "awscli"                 # AWS command line interface
+# brew "terraform"              # Infrastructure as code
+# brew "kubectl"                # Kubernetes CLI
+# brew "helm"                   # Kubernetes package manager
+
+# -----------------------------------------------------------------------------
+# Applications - Design
+# -----------------------------------------------------------------------------
+
+cask "figma"                    # Design collaboration and prototyping
+
+# -----------------------------------------------------------------------------
+# Applications - Work specific
+# -----------------------------------------------------------------------------
+
+# Add work-specific applications here as needed
+# Examples:
+# cask "docker"                 # Docker Desktop
+# cask "postman"                # API development and testing
