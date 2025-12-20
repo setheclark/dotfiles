@@ -367,7 +367,7 @@ setup_git_config() {
     # Check if gitconfig.local already exists
     if [[ -f "$HOME/.gitconfig.local" ]]; then
         info "~/.gitconfig.local already exists"
-        read -p "Reconfigure git settings? [y/N] " -n 1 -r
+        read -p "Reconfigure git settings? [y/N] " -n 1 -r < /dev/tty
         echo ""
         if [[ ! $REPLY =~ ^[Yy]$ ]]; then
             return 0
@@ -381,13 +381,13 @@ setup_git_config() {
     # Prompt for name
     local git_name=""
     while [[ -z "$git_name" ]]; do
-        read -p "Your full name: " git_name
+        read -p "Your full name: " git_name < /dev/tty
     done
 
     # Prompt for email
     local git_email=""
     while [[ -z "$git_email" ]]; do
-        read -p "Your email address: " git_email
+        read -p "Your email address: " git_email < /dev/tty
     done
 
     # Create gitconfig.local
@@ -405,7 +405,7 @@ EOF
 
     # Ask about work machine setup
     echo ""
-    read -p "Is this a work machine? [y/N] " -n 1 -r
+    read -p "Is this a work machine? [y/N] " -n 1 -r < /dev/tty
     echo ""
 
     if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -424,7 +424,7 @@ setup_git_work_config() {
     # Prompt for work email
     local work_email=""
     while [[ -z "$work_email" ]]; do
-        read -p "Your work email address: " work_email
+        read -p "Your work email address: " work_email < /dev/tty
     done
 
     # Prompt for company GitHub org/username
@@ -433,7 +433,7 @@ setup_git_work_config() {
         echo ""
         echo "Enter your company's GitHub organization or username."
         echo "Example: If your work repos are at github.com/company/*, enter 'company'"
-        read -p "Company GitHub org/username: " company_name
+        read -p "Company GitHub org/username: " company_name < /dev/tty
     done
 
     # Create gitconfig.work
@@ -564,7 +564,7 @@ offer_macos_defaults() {
     info "macOS defaults script available"
     echo "  This sets system preferences (Dock, Finder, keyboard, etc.)"
     echo ""
-    read -p "Run macOS defaults script now? [y/N] " -n 1 -r
+    read -p "Run macOS defaults script now? [y/N] " -n 1 -r < /dev/tty
     echo ""
 
     if [[ $REPLY =~ ^[Yy]$ ]]; then

@@ -429,7 +429,7 @@ main() {
     warn "This script will modify macOS system preferences."
     warn "Some changes require logout or restart to take effect."
     echo ""
-    read -p "Continue? [y/N] " -n 1 -r
+    read -p "Continue? [y/N] " -n 1 -r < /dev/tty
     echo ""
 
     if [[ ! $REPLY =~ ^[Yy]$ ]]; then
@@ -482,7 +482,7 @@ main() {
     fi
 
     echo ""
-    read -p "Restart affected applications? [y/N] " -n 1 -r
+    read -p "Restart affected applications? [y/N] " -n 1 -r < /dev/tty
     echo ""
 
     if [[ $REPLY =~ ^[Yy]$ ]]; then
