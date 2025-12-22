@@ -4,9 +4,10 @@
 # =============================================================================
 # https://felixkratz.github.io/SketchyBar/
 
-source "$CONFIG_DIR/colors.sh"
 
-PLUGIN_DIR="$CONFIG_DIR/plugins"
+source "$HOME/.config/sketchybar/colors.sh"
+
+PLUGIN_DIR="$HOME/.config/sketchybar/plugins"
 FONT="JetBrainsMono Nerd Font"
 
 # -----------------------------------------------------------------------------

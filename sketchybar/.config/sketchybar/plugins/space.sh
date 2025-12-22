@@ -1,7 +1,7 @@
 #!/bin/bash
 # Workspace/space indicator plugin
 
-source "$CONFIG_DIR/colors.sh"
+source "$HOME/.config/sketchybar/colors.sh"
 
 if [ "$SELECTED" = "true" ]; then
     sketchybar --set "$NAME" \

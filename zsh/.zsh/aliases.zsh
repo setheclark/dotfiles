@@ -18,6 +18,8 @@ alias dev="cd ~/dev"
 # List files (use eza if available, otherwise ls)
 # -----------------------------------------------------------------------------
 
+alias l=ll
+
 if command -v eza &>/dev/null; then
     alias ls="eza"
     alias ll="eza -la --git"

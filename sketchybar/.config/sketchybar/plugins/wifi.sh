@@ -1,7 +1,7 @@
 #!/bin/bash
 # WiFi plugin
 
-source "$CONFIG_DIR/colors.sh"
+source "$HOME/.config/sketchybar/colors.sh"
 
 WIFI_SSID="$(/System/Library/PrivateFrameworks/Apple80211.framework/Resources/airport -I 2>/dev/null | awk -F': ' '/ SSID/{print $2}')"
 

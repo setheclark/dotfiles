@@ -145,3 +145,4 @@ cask "aerospace"                # Tiling window manager (i3/Hyprland-like)
 brew "sketchybar"               # Customizable menu bar replacement
 brew "borders"                  # Window border highlighting (JankyBorders)
 cask "karabiner-elements"       # Keyboard customization and remapping
+cask "font-hack-nerd-font"      # Default sketchybar font

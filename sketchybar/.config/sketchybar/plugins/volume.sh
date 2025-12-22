@@ -1,7 +1,7 @@
 #!/bin/bash
 # Volume plugin
 
-source "$CONFIG_DIR/colors.sh"
+source "$HOME/.config/sketchybar/colors.sh"
 
 VOLUME="$(osascript -e 'output volume of (get volume settings)')"
 

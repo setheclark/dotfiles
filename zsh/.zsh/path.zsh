@@ -16,6 +16,12 @@ export PATH="$HOME/.local/bin:$PATH"
 # Development tools
 # -----------------------------------------------------------------------------
 
+# Android
+if [[ -d "$HOME/Library/Android/sdk" ]]; then
+  export ANDROID_HOME="$HOME/Library/Android/sdk"
+  export PATH="$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$PATH"
+fi
+
 # Go
 if [[ -d "$HOME/go" ]]; then
     export GOPATH="$HOME/go"
