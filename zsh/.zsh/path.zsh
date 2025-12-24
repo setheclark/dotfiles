@@ -16,12 +16,6 @@ export PATH="$HOME/.local/bin:$PATH"
 # Development tools
 # -----------------------------------------------------------------------------
 
-# Android
-if [[ -d "$HOME/Library/Android/sdk" ]]; then
-  export ANDROID_HOME="$HOME/Library/Android/sdk"
-  export PATH="$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$PATH"
-fi
-
 # Go
 if [[ -d "$HOME/go" ]]; then
     export GOPATH="$HOME/go"
@@ -62,11 +56,8 @@ if [[ -f "$HOME/.sdkman/bin/sdkman-init.sh" ]]; then
     source "$HOME/.sdkman/bin/sdkman-init.sh"
 fi
 
-# Android SDK (common locations)
-if [[ -d "$HOME/Library/Android/sdk" ]]; then
-    export ANDROID_HOME="$HOME/Library/Android/sdk"
-    export PATH="$ANDROID_HOME/platform-tools:$ANDROID_HOME/tools:$PATH"
-elif [[ -d "$HOME/Android/Sdk" ]]; then
+# Android SDK (Linux location - macOS handled in path.macos.zsh)
+if [[ -d "$HOME/Android/Sdk" ]]; then
     export ANDROID_HOME="$HOME/Android/Sdk"
     export PATH="$ANDROID_HOME/platform-tools:$ANDROID_HOME/tools:$PATH"
 fi
