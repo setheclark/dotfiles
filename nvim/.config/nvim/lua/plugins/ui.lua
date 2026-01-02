@@ -2,7 +2,12 @@ return {
 	{
 		"catppuccin/nvim",
 		lazy = false,
-		opts = {},
+		opts = {
+			transparent_background = true,
+			float = {
+				transparent = true,
+			},
+		},
 	},
 	{
 		"lazyVim/LazyVim",
@@ -50,4 +55,3 @@ return {
 	--     }
 	-- },
 }
-

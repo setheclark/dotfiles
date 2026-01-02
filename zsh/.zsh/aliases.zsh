@@ -67,6 +67,7 @@ alias gd="git diff"
 alias gco="git checkout"
 alias gb="git branch"
 alias glog="git log --oneline --graph --decorate"
+alias grb="git rebase"
 
 # Lazygit if available
 if command -v lazygit &>/dev/null; then
