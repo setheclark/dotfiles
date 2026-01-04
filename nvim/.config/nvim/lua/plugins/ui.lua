@@ -10,7 +10,7 @@ return {
 		},
 	},
 	{
-		"lazyVim/LazyVim",
+		"LazyVim/LazyVim",
 		opts = {
 			colorscheme = "catppuccin-frappe",
 		},

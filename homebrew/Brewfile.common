@@ -141,8 +141,8 @@ cask "1password"                # Password manager
 # Window Management & Desktop Customization
 # -----------------------------------------------------------------------------
 
-# cask "aerospace"                # Tiling window manager (i3/Hyprland-like)
-cask "amethyst"                 # Tiling window manager
+cask "aerospace"                # Tiling window manager (i3/Hyprland-like)
+# cask "amethyst"                 # Tiling window manager
 brew "sketchybar"               # Customizable menu bar replacement
 brew "borders"                  # Window border highlighting (JankyBorders)
 cask "karabiner-elements"       # Keyboard customization and remapping

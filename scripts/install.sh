@@ -180,16 +180,17 @@ stow_packages() {
     "lazygit"
     "ghostty"
     "tmux"
+    "zellij"
   )
 
   # macOS window management packages
   if [[ "$DOTFILES_MACHINE" == macos-* ]]; then
     packages+=(
-      # "aerospace"
+      "aerospace"
       "sketchybar"
       "borders"
       "karabiner"
-      "amethyst"
+      # "amethyst"
     )
   fi
 

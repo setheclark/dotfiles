@@ -6,6 +6,8 @@
 
 theme = Catppuccin Frappe
 
+gtk-titlebar = false
+
 # -----------------------------------------------------------------------------
 # Font
 # -----------------------------------------------------------------------------
@@ -15,13 +17,13 @@ font-size = 14
 
 window-padding-x = 10
 window-padding-y = 10
-window-decoration = true
+window-decoration = none
 
 background-blur-radius = 20
-background-opacity = 0.9
+background-opacity = 0.93
 
 # macOS specific
-macos-titlebar-style = tabs
+macos-titlebar-style = hidden
 macos-option-as-alt = true
 
 # -----------------------------------------------------------------------------
