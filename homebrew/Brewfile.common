@@ -9,6 +9,7 @@
 
 tap "homebrew/bundle"           # Brewfile support
 tap "homebrew/cask-fonts"       # Nerd fonts and other fonts
+tap "FelixKratz/formulae"
 
 # -----------------------------------------------------------------------------
 # CLI Tools - Core
@@ -59,6 +60,7 @@ brew "watch"                    # Run commands periodically
 brew "zellij"                   # Pluggable terminal workspace, with terminal multiplexer as the base feature
 brew "lazygit"                  # Terminal UI for git commands
 brew "pre-commit"               # Git hook framework
+brew "lua"                      # Powerful, lightweight programming language 
 
 # -----------------------------------------------------------------------------
 # CLI Tools - Secrets & Security
@@ -123,6 +125,7 @@ cask "obsidian"                 # Markdown knowledge base
 # -----------------------------------------------------------------------------
 
 cask "vlc"                      # Media player
+cask "switchaudio-osx"          # A command-line utility to switch the audio source on Mac OS X.
 
 # -----------------------------------------------------------------------------
 # Applications - Browsers
@@ -142,6 +145,8 @@ cask "1password"                # Password manager
 # -----------------------------------------------------------------------------
 
 cask "aerospace"                # Tiling window manager (i3/Hyprland-like)
+cask "sf-symbols"               # Tool that provides consistent, highly configurable symbols for apps
+
 # cask "amethyst"                 # Tiling window manager
 brew "sketchybar"               # Customizable menu bar replacement
 brew "borders"                  # Window border highlighting (JankyBorders)

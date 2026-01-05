@@ -24,9 +24,7 @@ finder() {
     open "${1:-.}"
 }
 
-# Flush DNS cache
-flushdns() {
-    sudo dscacheutil -flushcache
-    sudo killall -HUP mDNSResponder
-    echo "DNS cache flushed"
+# Aerospace - list windows and focus
+ff() {
+  aerospace list-windows --all | fzf --bind 'enter:execute(bash -c "aerospace focus --window-id {1}")+abort'
 }

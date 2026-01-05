@@ -72,49 +72,6 @@ install_brew_packages() {
 }
 
 # -----------------------------------------------------------------------------
-# Install packages for Linux
-# -----------------------------------------------------------------------------
-install_linux_packages() {
-  if [[ "$DOTFILES_MACHINE" != "linux" ]]; then
-    return 0
-  fi
-
-  info "Installing Linux packages..."
-
-  # Detect package manager and install common tools
-  if command -v apt-get &>/dev/null; then
-    sudo apt-get update
-    sudo apt-get install -y \
-      zsh \
-      neovim \
-      fzf \
-      ripgrep \
-      bat \
-      stow \
-      curl \
-      git
-  elif command -v pacman &>/dev/null; then
-    sudo pacman -Sy --noconfirm \
-      zsh \
-      neovim \
-      fzf \
-      ripgrep \
-      bat \
-      stow \
-      curl \
-      git
-  fi
-
-  # Install starship if not present
-  if ! command -v starship &>/dev/null; then
-    info "Installing starship prompt..."
-    curl -sS https://starship.rs/install.sh | sh -s -- -y
-  fi
-
-  success "Linux packages installed"
-}
-
-# -----------------------------------------------------------------------------
 # Backup existing files that would conflict with stow
 # -----------------------------------------------------------------------------
 backup_conflicts() {
@@ -179,25 +136,14 @@ stow_packages() {
     "bat"
     "lazygit"
     "ghostty"
-    "tmux"
     "zellij"
+    # window management packages
+    "aerospace"
+    "sketchybar"
+    "borders"
+    "karabiner"
+
   )
-
-  # macOS window management packages
-  if [[ "$DOTFILES_MACHINE" == macos-* ]]; then
-    packages+=(
-      "aerospace"
-      "sketchybar"
-      "borders"
-      "karabiner"
-      # "amethyst"
-    )
-  fi
-
-  # Add fish if the user wants to experiment with it
-  if [[ -d "$DOTFILES_DIR/fish" ]]; then
-    packages+=("fish")
-  fi
 
   for package in "${packages[@]}"; do
     if [[ -d "$DOTFILES_DIR/$package" ]]; then
@@ -224,80 +170,6 @@ stow_packages() {
 }
 
 # -----------------------------------------------------------------------------
-# Setup SSH directory and permissions
-# -----------------------------------------------------------------------------
-setup_ssh() {
-  info "Setting up SSH configuration..."
-
-  # Ensure ~/.ssh exists with correct permissions
-  mkdir -p "$HOME/.ssh"
-  chmod 700 "$HOME/.ssh"
-
-  # Create sockets directory for ControlMaster
-  mkdir -p "$HOME/.ssh/sockets"
-  chmod 700 "$HOME/.ssh/sockets"
-
-  # Create config.d directory if it doesn't exist (stow might not create empty dirs)
-  mkdir -p "$HOME/.ssh/config.d"
-  chmod 700 "$HOME/.ssh/config.d"
-
-  # Set correct permissions on config files
-  if [[ -f "$HOME/.ssh/config" ]]; then
-    chmod 600 "$HOME/.ssh/config"
-  fi
-
-  # Set permissions on config.d files
-  for f in "$HOME/.ssh/config.d"/*.conf; do
-    [[ -f "$f" ]] && chmod 600 "$f"
-  done
-
-  # Create config.local if it doesn't exist
-  if [[ ! -f "$HOME/.ssh/config.local" ]]; then
-    if [[ -f "$DOTFILES_DIR/local/.ssh.config.local.example" ]]; then
-      cp "$DOTFILES_DIR/local/.ssh.config.local.example" "$HOME/.ssh/config.local"
-      chmod 600 "$HOME/.ssh/config.local"
-      success "Created ~/.ssh/config.local from template"
-    else
-      # Create empty file so Include doesn't complain
-      touch "$HOME/.ssh/config.local"
-      chmod 600 "$HOME/.ssh/config.local"
-    fi
-  else
-    chmod 600 "$HOME/.ssh/config.local"
-    info "~/.ssh/config.local already exists, skipping"
-  fi
-
-  success "SSH configuration complete"
-}
-
-# -----------------------------------------------------------------------------
-# Install Catppuccin themes for bat and delta
-# -----------------------------------------------------------------------------
-setup_catppuccin_themes() {
-  info "Setting up Catppuccin themes..."
-
-  # Install bat themes
-  if command -v bat &>/dev/null; then
-    local bat_themes_dir="$(bat --config-dir)/themes"
-    mkdir -p "$bat_themes_dir"
-
-    # Download Catppuccin Frappe theme for bat if not present
-    if [[ ! -f "$bat_themes_dir/Catppuccin Frappe.tmTheme" ]]; then
-      info "Downloading Catppuccin Frappe theme for bat..."
-      curl -sLo "$bat_themes_dir/Catppuccin Frappe.tmTheme" \
-        "https://raw.githubusercontent.com/catppuccin/bat/main/themes/Catppuccin%20Frappe.tmTheme" &&
-        bat cache --build &>/dev/null &&
-        success "Installed Catppuccin theme for bat" ||
-        warn "Failed to download bat theme"
-    else
-      info "Catppuccin theme for bat already installed"
-    fi
-  fi
-
-  success "Catppuccin themes setup complete"
-}
-
-# -----------------------------------------------------------------------------
 # Setup macOS window management tools
 # -----------------------------------------------------------------------------
 setup_macos_wm() {
@@ -305,50 +177,12 @@ setup_macos_wm() {
     return 0
   fi
 
+  # Sketchybar setup
+  curl -L https://github.com/kvndrsslr/sketchybar-app-font/releases/download/v2.0.51/sketchybar-app-font.ttf -o $HOME/Library/Fonts/sketchybar-app-font.ttf
+  # SbarLua
+  (git clone https://github.com/FelixKratz/SbarLua.git /tmp/SbarLua && cd /tmp/SbarLua/ && make install && rm -rf /tmp/SbarLua/)
+
   info "Setting up macOS window management..."
-
-  # Make sketchybar plugins executable
-  if [[ -d "$HOME/.config/sketchybar/plugins" ]]; then
-    chmod +x "$HOME/.config/sketchybar/plugins/"*.sh 2>/dev/null || true
-    success "Made sketchybar plugins executable"
-  fi
-
-  # Make borders config executable
-  if [[ -f "$HOME/.config/borders/bordersrc" ]]; then
-    chmod +x "$HOME/.config/borders/bordersrc"
-    success "Made borders config executable"
-  fi
-
-  # Make sketchybar config executable
-  if [[ -f "$HOME/.config/sketchybar/sketchybarrc" ]]; then
-    chmod +x "$HOME/.config/sketchybar/sketchybarrc"
-  fi
-
-  # Make sketchybar colors script executable
-  if [[ -f "$HOME/.config/sketchybar/colors.sh" ]]; then
-    chmod +x "$HOME/.config/sketchybar/colors.sh"
-  fi
-
-  # Start services if installed
-  if command -v sketchybar &>/dev/null; then
-    if ! brew services list | grep -q "sketchybar.*started"; then
-      info "Starting sketchybar service..."
-      brew services start sketchybar 2>/dev/null || warn "Failed to start sketchybar"
-    else
-      info "Restarting sketchybar to apply config..."
-      brew services restart sketchybar 2>/dev/null || true
-    fi
-  fi
-
-  if command -v borders &>/dev/null; then
-    if ! brew services list | grep -q "borders.*started"; then
-      info "Starting borders service..."
-      brew services start borders 2>/dev/null || warn "Failed to start borders"
-    else
-      info "Restarting borders to apply config..."
-      brew services restart borders 2>/dev/null || true
-    fi
-  fi
 
   # Remind about accessibility permissions
   echo ""
@@ -630,18 +464,9 @@ main() {
   setup_machine_profile
   setup_xdg_dirs
 
-  case "$DOTFILES_MACHINE" in
-  macos-*)
-    install_brew_packages
-    ;;
-  linux)
-    install_linux_packages
-    ;;
-  esac
+  install_brew_packages
 
   stow_packages
-  setup_ssh
-  setup_catppuccin_themes
   setup_macos_wm
   setup_git_config
   setup_local_files
