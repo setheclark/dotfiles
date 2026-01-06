@@ -45,6 +45,7 @@ brew "dust"                     # Intuitive disk usage (better du)
 brew "duf"                      # Disk usage overview (better df)
 brew "procs"                    # Modern replacement for ps
 brew "sd"                       # Intuitive find & replace (better sed)
+brew "terminal-notifier"        # Send macOS User Notifications from the command-line
 
 # -----------------------------------------------------------------------------
 # CLI Tools - Development

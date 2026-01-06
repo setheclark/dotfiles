@@ -20,7 +20,7 @@ setopt HIST_VERIFY            # Show command before executing from history
 setopt DOT_GLOB
 
 # -----------------------------------------------------------------------------
-# Options
+#$ echo 'Piped Message Data!' | terminal-notifier -sound default Options
 # -----------------------------------------------------------------------------
 
 setopt AUTO_CD              # cd into directory without cd command
@@ -47,17 +47,3 @@ zstyle ':completion:*' menu select
 # Colorize completions
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 
-# -----------------------------------------------------------------------------
-# Key bindings
-# -----------------------------------------------------------------------------
-
-# Use emacs keybindings
-bindkey -e
-
-# Better history search
-bindkey '^[[A' history-search-backward
-bindkey '^[[B' history-search-forward
-
-# Word navigation
-bindkey '^[[1;5C' forward-word    # Ctrl+Right
-bindkey '^[[1;5D' backward-word   # Ctrl+Left

@@ -137,6 +137,8 @@ stow_packages() {
     "lazygit"
     "ghostty"
     "zellij"
+    "claude"
+    "claude-code-notifier"
     # window management packages
     "aerospace"
     "sketchybar"

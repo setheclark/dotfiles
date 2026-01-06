@@ -73,3 +73,13 @@ ssh/.ssh/sockets/
 # Temporary files
 tmp/
 temp/
+
+# -----------------------------------------------------------------------------
+# Claude Code
+# -----------------------------------------------------------------------------
+
+# PR review drafts (created by review-pr skill)
+.claude-reviews/
+
+# Git worktrees (created during PR reviews)
+.worktrees/
