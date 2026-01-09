@@ -77,7 +77,6 @@ brew "age"                      # Simple, modern file encryption
 
 brew "ffmpeg"                   # Audio/video converter and streamer
 brew "imagemagick"              # Image manipulation tools
-brew "yt-dlp"                   # Download videos from YouTube and other sites
 
 # -----------------------------------------------------------------------------
 # Development - Languages & Runtimes
@@ -117,7 +116,6 @@ cask "figma"                    # Collaborative interface design tool
 # -----------------------------------------------------------------------------
 
 cask "slack"                    # Team communication
-cask "discord"                  # Voice, video, and text chat
 
 # -----------------------------------------------------------------------------
 # Applications - Productivity
@@ -129,7 +127,6 @@ cask "obsidian"                 # Markdown knowledge base
 # Applications - Media
 # -----------------------------------------------------------------------------
 
-cask "vlc"                      # Media player
 cask "switchaudio-osx"          # A command-line utility to switch the audio source on Mac OS X.
 
 # -----------------------------------------------------------------------------
