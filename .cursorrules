@@ -1,0 +1,586 @@
+# Dotfiles Repository - AI Assistant Guidelines
+
+This is a personal macOS dotfiles repository managed with GNU Stow. See README.md for user documentation.
+
+## Your Role as AI Assistant
+
+You help maintain and improve this repository while strictly following these conventions and safety rules. When in doubt, ask for clarification rather than making assumptions.
+
+---
+
+## 🚨 CRITICAL SAFETY RULES
+
+### NEVER COMMIT SECRETS
+
+These files must NEVER be tracked in git:
+
+**Local Override Files:**
+- `*.local` - All local override files
+- `*.local.*` - Any local variant files
+- `~/.zshrc.local` - Machine-specific shell configuration
+- `~/.gitconfig.local` - Git user identity
+- `~/.gitconfig.work` - Work git identity
+- `~/.ssh/config.local` - SSH host configurations
+
+**SSH & Secrets:**
+- SSH private keys (`id_*`, `*.pem`, `*.key`)
+- `.env` files with credentials
+- API tokens and credentials
+- 1Password vaults or secret files
+
+**Generated Files:**
+- `.dotfiles-machine` - Machine profile marker (deprecated)
+- `~/.dotfiles-backup/` - User backups
+
+### IDEMPOTENCY IS REQUIRED
+
+**All scripts and operations MUST be idempotent (safe to run multiple times):**
+- Check if work is already done before doing it
+- Skip completed steps gracefully with status messages
+- Never create duplicate configurations
+- Use markers like `~/.dotfiles-installed` to track state
+- Example: Check if tool exists before installing
+
+### BACKUP STRATEGY
+
+**Never overwrite user data without backing up:**
+- First-time install backs up conflicting files to `~/.dotfiles-backup/initial/`
+- Only create backup directory once (idempotency)
+- Never silently overwrite existing configurations
+- Preserve user backups until manually deleted
+
+### LOCAL OVERRIDE PATTERN
+
+**Machine-specific configs go in `.local` files (NOT tracked in git):**
+- Use for: API tokens, credentials, machine-specific paths, corporate proxies
+- Provide `.local.example` templates in `local/` directory
+- Install script copies examples to actual `.local` files
+- `.local` files are sourced LAST (take precedence over tracked configs)
+
+---
+
+## 📁 REPOSITORY ARCHITECTURE
+
+### Stow-Based Structure
+
+This repository uses **GNU Stow** for symlink management:
+- Each top-level directory (except special dirs) is a "package"
+- Packages mirror home directory structure (e.g., `zsh/.zshrc` → `~/.zshrc`)
+- Stow creates symlinks from package files to `$HOME`
+- Changes to stowed files are immediately reflected in home directory
+
+### Stowable Packages (15 total)
+
+- `aerospace/` - Tiling window manager configuration
+- `bat/` - Syntax highlighter configuration
+- `borders/` - Window border highlighting (JankyBorders)
+- `claude/` - Claude Code settings and skills
+- `claude-code-notifier/` - Notification hooks
+- `ghostty/` - Terminal emulator configuration
+- `git/` - Git configuration (no identity)
+- `karabiner/` - Keyboard remapping configuration
+- `lazygit/` - Git TUI configuration
+- `nvim/` - Neovim editor configuration
+- `sketchybar/` - Menu bar replacement configuration
+- `ssh/` - SSH configuration (no private keys)
+- `starship/` - Shell prompt configuration
+- `zellij/` - Terminal multiplexer configuration
+- `zsh/` - Shell configuration (modular)
+
+### Non-Stowable Directories
+
+Defined in `.stow-local-ignore` (never stowed):
+- `scripts/` - Installation and setup scripts
+- `homebrew/` - Brewfile for package management
+- `local/` - Template files for local overrides
+- `.git/`, `.gitignore`, `README.md`, `LICENSE` - Repository metadata
+
+### Directory Mirroring Convention
+
+Packages use XDG Base Directory structure:
+```
+package/.config/tool/config  →  ~/.config/tool/config
+package/.file                →  ~/.file
+```
+
+---
+
+## 🍎 PLATFORM & DEPENDENCIES
+
+### macOS-Only
+
+**All configurations are designed EXCLUSIVELY for macOS:**
+- Scripts check for Darwin (macOS) and may fail on other platforms
+- Uses macOS-specific tools: Homebrew, native APIs, system preferences
+- Window management uses macOS-specific tools
+- **DO NOT** add Linux/Windows support - this is intentionally Mac-only
+
+### Core Dependencies
+
+- **Homebrew** - macOS package manager
+- **GNU Stow** - Symlink manager for dotfiles
+- **zsh** - Shell (with modular configuration)
+- **git** - Version control
+
+### Window Management Stack
+
+- **AeroSpace** - i3-like tiling window manager
+- **Sketchybar** - Custom menu bar replacement
+- **Borders (JankyBorders)** - Window border highlighting
+- **Karabiner-Elements** - Keyboard customization
+
+---
+
+## 📦 BREWFILE MANAGEMENT
+
+### Single Source of Truth
+
+**`homebrew/Brewfile` contains ALL Homebrew packages:**
+- **NEVER** use `brew install` directly - always update Brewfile
+- Single unified file (no separate common/personal/work files)
+- Run `brew bundle --file=homebrew/Brewfile --no-lock` to install
+
+### Category Organization
+
+Brewfile is organized by category with clear comments:
+- Taps (repositories)
+- CLI Tools (Core, Shell, Modern replacements, Development, Secrets, Media)
+- Languages & Runtimes
+- Fonts (Nerd Fonts)
+- Applications (Terminal, Development, Communication, Productivity, Browsers, Utilities)
+- Window Management & Desktop Customization
+
+### Brewfile Rules
+
+- Use `brew` for CLI tools
+- Use `cask` for GUI applications
+- Use `cask` for fonts (requires `homebrew/cask-fonts` tap)
+- Add descriptive comments for each package
+- Group related packages together
+- Keep alphabetically sorted within categories
+
+### Adding Packages
+
+```bash
+# Edit Brewfile in appropriate category
+vim homebrew/Brewfile
+
+# Install new package
+brew bundle --file=homebrew/Brewfile
+
+# Commit change
+git add homebrew/Brewfile
+git commit -m "Add package-name to Brewfile"
+```
+
+---
+
+## 🐚 SHELL CONFIGURATION (ZSH)
+
+### Modular Structure
+
+**Main file:** `zsh/.zshrc` (minimal, sources other files)
+**Module files:** `zsh/.zsh/*.zsh` (auto-sourced in alphabetical order)
+
+### Module Files
+
+- `aliases.zsh` - Shell aliases
+- `brew.zsh` - Homebrew initialization
+- `functions.zsh` - Shell functions (general)
+- `functions_dev.zsh` - Development-specific functions
+- `fzf.zsh` - Fuzzy finder setup
+- `options.zsh` - Zsh options and settings
+- `path.zsh` - PATH configuration and tool initialization
+- `prompt.zsh` - Prompt setup (Starship)
+- `tools.zsh` - Tool initializations and integrations
+
+### Source Order (IMPORTANT)
+
+1. Environment variables (in `.zshrc`)
+2. All `.zsh/*.zsh` files (auto-sourced alphabetically)
+3. `~/.zshrc.local` (local overrides - sourced LAST, highest precedence)
+
+### Shell Conventions
+
+- **Check command existence:** `command -v tool &>/dev/null` before aliasing
+- **Provide fallbacks:** If modern tool missing, fall back to traditional
+- **Modern CLI replacements:** Prefer eza, bat, ripgrep, fd over traditional tools
+- **Never hardcode paths:** Use environment variables
+- **XDG compliance:** Use `$XDG_CONFIG_HOME`, `$XDG_DATA_HOME`, `$XDG_CACHE_HOME`
+
+### Modifying Shell Config
+
+```bash
+# Edit appropriate module
+vim zsh/.zsh/aliases.zsh
+
+# Test changes
+source ~/.zshrc
+
+# Commit
+git add zsh/.zsh/aliases.zsh
+git commit -m "Update shell aliases"
+```
+
+---
+
+## 🎨 THEME CONSISTENCY
+
+### Universal Theme: Catppuccin Frappe
+
+**ALL tools MUST use Catppuccin Frappe theme when available:**
+- Provides consistent visual experience across all tools
+- Use exact color codes from official Catppuccin palette
+- Theme is already configured for: ghostty, starship, nvim, bat, delta, lazygit, fzf, sketchybar
+
+### When Adding New Tools
+
+1. Check if Catppuccin Frappe theme exists for the tool
+2. If yes, configure it in the tool's config file
+3. If no, use closest equivalent or default theme
+4. Document theme configuration with comments
+5. Link to theme source if applicable
+
+---
+
+## 🔧 GIT CONFIGURATION & WORKFLOW
+
+### Configuration Structure
+
+- **Main config:** `git/.gitconfig` (tracked, NO user identity)
+- **Global ignore:** `git/.config/git/ignore` (tracked)
+- **Local identity:** `~/.gitconfig.local` (NOT tracked, machine-specific)
+- **Work identity:** `~/.gitconfig.work` (NOT tracked, optional)
+
+### Work Email Switching
+
+Git uses conditional includes for automatic work email:
+```gitconfig
+# In ~/.gitconfig.local
+[includeIf "hasconfig:remote.*.url:git@github.com:company/**"]
+    path = ~/.gitconfig.work
+```
+
+### Git Preferences
+
+- **Default branch:** `main`
+- **Pager:** delta (with Catppuccin Frappe theme)
+- **Pull strategy:** rebase
+- **Push:** `current` with `autoSetupRemote`
+- **Fetch:** prune deleted branches automatically
+- **Rebase:** autoStash and autoSquash enabled
+
+### Commit Conventions
+
+- Use descriptive messages focusing on "why" not "what"
+- No strict format enforced
+- Recent commits follow simple pattern: "Add X", "Update Y", "Fix Z"
+- Include Co-Authored-By when appropriate
+
+---
+
+## 🛠️ DEVELOPMENT WORKFLOWS
+
+### Adding New Package
+
+```bash
+# Create package directory
+mkdir -p newpkg/.config/newpkg
+
+# Add configuration files
+vim newpkg/.config/newpkg/config
+
+# Add package to stow list in scripts/install.sh (line ~130-147)
+vim scripts/install.sh
+
+# Test stowing
+stow -v newpkg
+
+# Commit
+git add newpkg/
+git commit -m "Add newpkg configuration"
+```
+
+### Adding Homebrew Package
+
+```bash
+# Edit Brewfile in appropriate category
+vim homebrew/Brewfile
+
+# Install package
+brew bundle --file=homebrew/Brewfile
+
+# Commit
+git add homebrew/Brewfile
+git commit -m "Add package-name to Brewfile"
+```
+
+### Modifying Existing Package
+
+```bash
+# Edit config file in package
+vim package/.config/tool/config
+
+# Changes are immediately reflected in home (via symlink)
+# Test changes
+
+# Commit
+git add package/
+git commit -m "Update tool configuration"
+```
+
+### Modifying Shell Config
+
+```bash
+# Edit appropriate module file
+vim zsh/.zsh/aliases.zsh
+
+# Test changes
+source ~/.zshrc
+
+# Commit
+git add zsh/.zsh/aliases.zsh
+git commit -m "Update shell aliases"
+```
+
+---
+
+## 📥 INSTALLATION & TESTING
+
+### Main Installation Script
+
+**`scripts/install.sh`** - Unified, idempotent installer
+
+**What it does (in order):**
+1. Install Xcode Command Line Tools (if needed)
+2. Install Homebrew (if needed)
+3. Install GitHub CLI (if needed)
+4. Authenticate with GitHub (if needed)
+5. Setup XDG directories
+6. Install Homebrew packages (from Brewfile)
+7. Backup conflicting files (first time only)
+8. Stow all packages (creates symlinks)
+9. Setup macOS window management (Sketchybar font, SbarLua)
+10. Setup git configuration (interactive, first time)
+11. Setup local files (.zshrc.local, etc.)
+12. Check for 1Password CLI
+13. Set default shell to zsh
+14. Offer to run macOS defaults script
+
+### Fresh Installation
+
+```bash
+# Can be curl-ed and piped to bash
+curl -fsSL <url>/scripts/install.sh | bash
+```
+
+### Update Existing Installation
+
+```bash
+cd ~/git/dotfiles
+git pull
+./scripts/install.sh  # Idempotent - safe to rerun
+```
+
+### Manual Stow Commands
+
+```bash
+# Stow single package
+stow -v --target=$HOME package-name
+
+# Restow (after config changes)
+stow -v --restow --target=$HOME package-name
+
+# Unstow (remove symlinks)
+stow -v --delete --target=$HOME package-name
+
+# Dry run (preview changes)
+stow -v --no --target=$HOME package-name
+```
+
+### Testing Changes
+
+**Before committing:**
+1. Test scripts are idempotent (run twice, check no errors)
+2. Verify stow operations don't conflict: `stow -v --restow package`
+3. Check for broken symlinks: `find ~ -maxdepth 2 -type l -xtype l`
+4. Test shell changes: `source ~/.zshrc`
+5. Verify no secrets committed: `git diff --cached`
+
+---
+
+## 🚫 FILES NEVER TO MODIFY
+
+### Repository Internals
+- `.git/` - Git internals
+- `.stow-local-ignore` - Stow configuration (rarely changed)
+- `.gitignore` - Git ignore rules (rarely changed)
+
+### Generated/User Files
+- `~/.dotfiles-backup/` - User backups from first install
+- `.worktrees/` - Git worktrees (created by PR review skill)
+- `.claude-reviews/` - PR review drafts
+
+### Machine-Specific Files (NOT in repo)
+- `~/.zshrc.local` - Machine-specific shell config
+- `~/.gitconfig.local` - Git user identity
+- `~/.gitconfig.work` - Work git identity
+- `~/.ssh/` private keys - Security-critical
+- `~/.dotfiles-installed` - Installation marker
+
+---
+
+## 🔐 SECRETS MANAGEMENT
+
+### Primary Method: 1Password CLI
+
+```bash
+# Install
+brew install 1password-cli
+op account add
+
+# Usage in ~/.zshrc.local
+export API_KEY=$(op read "op://Personal/Service/api-key")
+export DB_PASSWORD=$(op read "op://Work/Database/password")
+```
+
+### Alternative: Environment Variables
+
+- Store in `~/.zshrc.local` (NOT tracked in git)
+- Use for tokens, credentials, API keys
+- Never commit to git
+
+### SSH Keys
+
+- Can use 1Password SSH agent (configured in `~/.ssh/config.local`)
+- Private keys NEVER tracked in git
+- Public keys CAN be tracked
+- SSH config includes: `~/.ssh/config` (tracked) + `~/.ssh/config.local` (not tracked)
+
+---
+
+## ✅ QUALITY STANDARDS
+
+### Bash Scripts
+
+- Use `set -e` (exit on error)
+- Functions have single responsibility
+- Clear variable naming (`lowercase_with_underscores`)
+- Comments explain "why" not "what"
+- Descriptive error messages with context
+- Check for command existence before use
+
+### Configuration Files
+
+- Use comments to explain purpose
+- Group related settings together
+- Include examples for complex patterns
+- Link to documentation when helpful
+
+### Testing Requirements
+
+- Scripts are idempotent (safe to run multiple times)
+- Provide clear status output (info/success/warn/error)
+- Graceful degradation (fallbacks when tools missing)
+- Confirmations for destructive actions
+- Test stow operations don't create conflicts
+
+---
+
+## 🎯 KEY PRINCIPLES (SUMMARY)
+
+1. **Idempotency** - All operations safe to repeat
+2. **macOS-Only** - Don't support other platforms
+3. **Stow-Based** - Symlinks mirror home directory structure
+4. **Local Overrides** - Machine-specific in `.local` files (not tracked)
+5. **Theme Consistency** - Catppuccin Frappe everywhere possible
+6. **Secrets Safety** - Never commit credentials, use 1Password CLI
+7. **Modular Shell** - Separate concerns in `.zsh/*.zsh` files
+8. **Brewfile Central** - All packages in single Brewfile
+9. **Backup First** - Never lose user data
+10. **XDG Compliance** - Use `.config/` when possible
+
+---
+
+## 🤖 YOUR RESPONSIBILITIES AS AI ASSISTANT
+
+### Safety First
+- **Never commit secrets or `.local` files**
+- Maintain idempotency in all scripts
+- Preserve backup strategy
+- Check changes don't break stow operations
+
+### Follow Patterns
+- Use existing modular structure
+- Match coding style and conventions
+- Keep Catppuccin Frappe theme consistent
+- Update Brewfile instead of direct installs
+
+### Quality & Testing
+- Test changes before committing
+- Verify scripts are idempotent
+- Ensure clear error messages
+- Check for broken symlinks
+
+### Communication
+- Ask for clarification on ambiguous requests
+- Document significant changes in commit messages
+- Explain trade-offs when multiple approaches exist
+- Ensure macOS compatibility
+
+---
+
+## 📚 QUICK REFERENCE
+
+### Common Commands
+
+```bash
+# Navigate to dotfiles
+cd ~/git/dotfiles
+
+# Run installer (idempotent)
+./scripts/install.sh
+
+# Stow package
+stow -v --target=$HOME package-name
+
+# Restow after changes
+stow -v --restow --target=$HOME package-name
+
+# Install Brewfile packages
+brew bundle --file=homebrew/Brewfile
+
+# Test shell changes
+source ~/.zshrc
+
+# Check for broken symlinks
+find ~ -maxdepth 2 -type l -xtype l
+
+# Verify no secrets in staging
+git diff --cached | grep -i "password\|token\|key\|secret"
+```
+
+### Key Locations
+
+- **Dotfiles:** `~/git/dotfiles`
+- **Install script:** `~/git/dotfiles/scripts/install.sh`
+- **Brewfile:** `~/git/dotfiles/homebrew/Brewfile`
+- **Shell config:** `~/git/dotfiles/zsh/`
+- **Local overrides:** `~/.zshrc.local`, `~/.gitconfig.local`
+
+### Stow Packages
+
+aerospace, bat, borders, claude, claude-code-notifier, ghostty, git, karabiner, lazygit, nvim, sketchybar, ssh, starship, zellij, zsh
+
+---
+
+## 📖 Additional Resources
+
+- **User Documentation:** See `README.md` for end-user instructions
+- **macOS Defaults:** See `scripts/macos-defaults.sh` for system preferences
+- **Catppuccin Theme:** https://github.com/catppuccin/catppuccin
+- **GNU Stow:** https://www.gnu.org/software/stow/
+
+---
+
+**Remember:** When in doubt, ask for clarification. It's better to ask than to accidentally commit secrets or break idempotency!
