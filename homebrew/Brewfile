@@ -1,7 +1,7 @@
 # =============================================================================
-# Homebrew Brewfile - Common packages for all macOS machines
+# Homebrew Brewfile - All packages for macOS
 # =============================================================================
-# Install with: brew bundle --file=Brewfile.common
+# Install with: brew bundle --file=Brewfile
 
 # -----------------------------------------------------------------------------
 # Taps (repositories)
@@ -77,6 +77,7 @@ brew "age"                      # Simple, modern file encryption
 
 brew "ffmpeg"                   # Audio/video converter and streamer
 brew "imagemagick"              # Image manipulation tools
+brew "yt-dlp"                   # Download videos from YouTube and other sites
 
 # -----------------------------------------------------------------------------
 # Development - Languages & Runtimes
@@ -85,6 +86,7 @@ brew "imagemagick"              # Image manipulation tools
 brew "python"                   # Python 3 (latest stable)
 brew "node"                     # Node.js JavaScript runtime
 brew "go"                       # Go programming language
+brew "rust"                     # Rust programming language
 brew "kotlin"                   # Kotlin programming language
 brew "gradle"                   # Build automation tool (for Kotlin/Java)
 
@@ -108,12 +110,14 @@ cask "ghostty"                  # Fast, native terminal emulator
 
 cask "visual-studio-code"       # Code editor (complement to neovim)
 cask "jetbrains-toolbox"        # Manage JetBrains IDEs (IntelliJ, Android Studio, etc.)
+cask "figma"                    # Collaborative interface design tool
 
 # -----------------------------------------------------------------------------
 # Applications - Communication
 # -----------------------------------------------------------------------------
 
 cask "slack"                    # Team communication
+cask "discord"                  # Voice, video, and text chat
 
 # -----------------------------------------------------------------------------
 # Applications - Productivity
@@ -140,6 +144,8 @@ cask "firefox"                  # Firefox browser
 
 cask "raycast"                  # Spotlight replacement with extensions
 cask "1password"                # Password manager
+cask "appcleaner"               # Thoroughly uninstall unwanted apps
+cask "the-unarchiver"           # Archive extraction (supports many formats)
 
 # -----------------------------------------------------------------------------
 # Window Management & Desktop Customization
@@ -147,8 +153,6 @@ cask "1password"                # Password manager
 
 cask "aerospace"                # Tiling window manager (i3/Hyprland-like)
 cask "sf-symbols"               # Tool that provides consistent, highly configurable symbols for apps
-
-# cask "amethyst"                 # Tiling window manager
 brew "sketchybar"               # Customizable menu bar replacement
 brew "borders"                  # Window border highlighting (JankyBorders)
 cask "karabiner-elements"       # Keyboard customization and remapping

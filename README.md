@@ -1,35 +1,32 @@
 # Dotfiles
 
-Personal system configuration files managed with [GNU Stow](https://www.gnu.org/software/stow/).
-
-Supports:
-- macOS (personal and work machines)
-- Linux (Omarchy)
+Personal macOS system configuration files managed with [GNU Stow](https://www.gnu.org/software/stow/).
 
 ## Quick Start
 
 ### New Machine Setup
 
-Run the bootstrap script to set up a new machine from scratch:
+Run the install script to set up a new macOS machine from scratch:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/USERNAME/dotfiles/main/scripts/bootstrap.sh | bash
+curl -fsSL https://raw.githubusercontent.com/USERNAME/dotfiles/main/scripts/install.sh | bash
 ```
 
 The script will:
-1. Install Xcode CLI tools (macOS) or base dependencies (Linux)
-2. Install Homebrew (macOS)
+1. Install Xcode Command Line Tools
+2. Install Homebrew
 3. Install and authenticate GitHub CLI
-4. Ask which machine profile to use
-5. Clone this repository
-6. Run the full installation
+4. Install all Homebrew packages
+5. Stow dotfiles configurations
+6. Set up shell and local overrides
 
-### Existing Machine
+The script is **idempotent** - safe to run multiple times.
 
-If you already have the repository cloned:
+### Updating Existing Installation
 
 ```bash
 cd ~/git/dotfiles
+git pull
 ./scripts/install.sh
 ```
 
@@ -75,68 +72,72 @@ dotfiles/
 │   └── .ssh/
 │       ├── config
 │       └── config.d/
-├── homebrew/                 # Brewfiles (not stowed)
-│   ├── Brewfile.common
-│   ├── Brewfile.personal
-│   └── Brewfile.work
+├── homebrew/                 # Brewfile (not stowed)
+│   └── Brewfile              # All Homebrew packages
 ├── scripts/                  # Installation scripts
-│   ├── bootstrap.sh          # Curl-able bootstrap
-│   ├── install.sh            # Main installer
-│   ├── detect-machine.sh     # Machine profile
+│   ├── install.sh            # Unified installer (idempotent)
 │   └── macos-defaults.sh     # macOS system preferences
 └── local/                    # Templates for local overrides
     ├── .zshrc.local.example
     └── .gitconfig.local.example
 ```
 
-## Machine Profiles
-
-The system supports three machine profiles:
-
-| Profile | Description |
-|---------|-------------|
-| `macos-personal` | Personal MacBook |
-| `macos-work` | Work MacBook |
-| `linux` | Linux machine |
-
-Profiles are detected automatically or can be set manually:
-
-```bash
-DOTFILES_MACHINE=macos-work ./scripts/install.sh
-```
-
 ## Local Overrides
 
 Machine-specific settings go in `.local` files which are **not tracked by git**:
 
-- `~/.zshrc.local` - Machine-specific shell settings, paths, secrets
-- `~/.gitconfig.local` - Git user identity and signing configuration
+- `~/.zshrc.local` - Machine-specific shell settings, paths, secrets, extra packages
+- `~/.gitconfig.local` - Git user identity and work repository configuration
 
 Templates are provided in the `local/` directory.
 
-### Work Machine Example
+### Example: Machine-Specific Overrides
 
-For work machines, `~/.zshrc.local` might include:
+`~/.zshrc.local` for machine-specific customizations:
 
 ```zsh
 # Corporate proxy
 export HTTP_PROXY="http://proxy.work.com:8080"
 export HTTPS_PROXY="http://proxy.work.com:8080"
 
-# Work-specific paths
+# Machine-specific paths
 export PATH="/opt/corporate-tools/bin:$PATH"
 
-# Work aliases
-alias vpn="open /Applications/Corporate\ VPN.app"
+# Install machine-specific packages
+# brew install terraform aws-cli kubectl
 ```
 
-And `~/.gitconfig.local`:
+### Example: Work Repository Git Configuration
+
+The install script sets up your git identity in `~/.gitconfig.local` and optionally configures automatic work email switching using git's conditional includes.
+
+If you specified a work email during installation, git will automatically use your work email for repositories owned by your company:
 
 ```gitconfig
 [user]
     name = Your Name
-    email = your.name@company.com
+    email = your.personal@email.com
+
+# Work repository configuration
+# Automatically uses work email for repos owned by: company
+
+# SSH remotes: git@github.com:company/*
+[includeIf "hasconfig:remote.*.url:git@github.com:company/**"]
+    path = ~/.gitconfig.work
+
+# HTTPS remotes: https://github.com/company/*
+[includeIf "hasconfig:remote.*.url:https://github.com/company/**"]
+    path = ~/.gitconfig.work
 ```
+
+Where `~/.gitconfig.work` contains:
+
+```gitconfig
+[user]
+    email = your.work@company.com
+```
+
+This way, personal repos use your personal email, and work repos automatically use your work email.
 
 ## Secrets Management
 
@@ -186,14 +187,6 @@ stow -v --delete --target=$HOME zsh
 
 # Dry run (preview changes)
 stow -v --no --target=$HOME zsh
-```
-
-## Updating
-
-```bash
-cd ~/git/dotfiles
-git pull
-./scripts/install.sh
 ```
 
 ## Tools Included

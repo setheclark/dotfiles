@@ -1,15 +1,17 @@
 #!/usr/bin/env bash
 #
-# Main dotfiles installation script
-# Run this after bootstrap.sh or directly if dependencies are already installed
+# Unified macOS dotfiles installation script
+# Idempotent - safe to run multiple times
 #
-# Usage: ./scripts/install.sh
-# Environment: DOTFILES_MACHINE can be set to skip detection
+# Usage:
+#   Fresh install: curl -fsSL <url> | bash
+#   Update: ./scripts/install.sh
 
 set -e
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-BACKUP_DIR="$HOME/.dotfiles-backup/$(date +%Y%m%d-%H%M%S)"
+BACKUP_DIR="$HOME/.dotfiles-backup/initial"
+INSTALL_MARKER="$HOME/.dotfiles-installed"
 
 # Colors for output
 RED='\033[0;31m'
@@ -27,16 +29,87 @@ error() {
 }
 
 # -----------------------------------------------------------------------------
-# Ensure machine profile is set (ask if not)
+# Install Xcode Command Line Tools (prerequisite for macOS development)
 # -----------------------------------------------------------------------------
-setup_machine_profile() {
-  source "$DOTFILES_DIR/scripts/detect-machine.sh"
-  ensure_machine_profile
-  info "Using machine profile: $DOTFILES_MACHINE"
+install_xcode_cli() {
+  if xcode-select -p &>/dev/null; then
+    success "Xcode Command Line Tools already installed"
+    return 0
+  fi
+
+  info "Installing Xcode Command Line Tools..."
+  xcode-select --install
+
+  # Wait for installation to complete
+  until xcode-select -p &>/dev/null; do
+    sleep 5
+  done
+
+  success "Xcode Command Line Tools installed"
 }
 
 # -----------------------------------------------------------------------------
-# Install Homebrew packages (macOS)
+# Install Homebrew (macOS package manager)
+# -----------------------------------------------------------------------------
+install_homebrew() {
+  if command -v brew &>/dev/null; then
+    success "Homebrew already installed"
+    return 0
+  fi
+
+  info "Installing Homebrew..."
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+  # Add Homebrew to PATH for current session
+  if [[ -f /opt/homebrew/bin/brew ]]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  elif [[ -f /usr/local/bin/brew ]]; then
+    eval "$(/usr/local/bin/brew shellenv)"
+  fi
+
+  success "Homebrew installed"
+}
+
+# -----------------------------------------------------------------------------
+# Install GitHub CLI
+# -----------------------------------------------------------------------------
+install_gh() {
+  if command -v gh &>/dev/null; then
+    success "GitHub CLI already installed"
+    return 0
+  fi
+
+  if ! command -v brew &>/dev/null; then
+    warn "Homebrew not found, skipping GitHub CLI install"
+    return 0
+  fi
+
+  info "Installing GitHub CLI..."
+  brew install gh
+  success "GitHub CLI installed"
+}
+
+# -----------------------------------------------------------------------------
+# Authenticate with GitHub
+# -----------------------------------------------------------------------------
+auth_github() {
+  if ! command -v gh &>/dev/null; then
+    warn "GitHub CLI not found, skipping GitHub auth"
+    return 0
+  fi
+
+  if gh auth status &>/dev/null; then
+    success "Already authenticated with GitHub"
+    return 0
+  fi
+
+  info "Authenticating with GitHub..."
+  gh auth login
+  success "GitHub authentication complete"
+}
+
+# -----------------------------------------------------------------------------
+# Install Homebrew packages
 # -----------------------------------------------------------------------------
 install_brew_packages() {
   if ! command -v brew &>/dev/null; then
@@ -46,35 +119,23 @@ install_brew_packages() {
 
   info "Installing Homebrew packages..."
 
-  # Install common packages
-  if [[ -f "$DOTFILES_DIR/homebrew/Brewfile.common" ]]; then
-    info "Installing common packages..."
-    brew bundle --file="$DOTFILES_DIR/homebrew/Brewfile.common" || warn "Some common packages failed to install"
+  if [[ -f "$DOTFILES_DIR/homebrew/Brewfile" ]]; then
+    brew bundle --file="$DOTFILES_DIR/homebrew/Brewfile" --no-lock || warn "Some packages failed to install"
+    success "Homebrew packages installed"
+  else
+    warn "Brewfile not found at $DOTFILES_DIR/homebrew/Brewfile"
   fi
-
-  # Install profile-specific packages
-  case "$DOTFILES_MACHINE" in
-  macos-personal)
-    if [[ -f "$DOTFILES_DIR/homebrew/Brewfile.personal" ]]; then
-      info "Installing personal packages..."
-      brew bundle --file="$DOTFILES_DIR/homebrew/Brewfile.personal" || warn "Some personal packages failed to install"
-    fi
-    ;;
-  macos-work)
-    if [[ -f "$DOTFILES_DIR/homebrew/Brewfile.work" ]]; then
-      info "Installing work packages..."
-      brew bundle --file="$DOTFILES_DIR/homebrew/Brewfile.work" || warn "Some work packages failed to install"
-    fi
-    ;;
-  esac
-
-  success "Homebrew packages installed"
 }
 
 # -----------------------------------------------------------------------------
 # Backup existing files that would conflict with stow
 # -----------------------------------------------------------------------------
 backup_conflicts() {
+  # Skip if backup already exists (idempotency)
+  if [[ -d "$BACKUP_DIR" ]]; then
+    return 0
+  fi
+
   local package="$1"
   local dominated=false
 
@@ -175,16 +236,12 @@ stow_packages() {
 # Setup macOS window management tools
 # -----------------------------------------------------------------------------
 setup_macos_wm() {
-  if [[ "$DOTFILES_MACHINE" != macos-* ]]; then
-    return 0
-  fi
+  info "Setting up macOS window management tools..."
 
   # Sketchybar setup
   curl -L https://github.com/kvndrsslr/sketchybar-app-font/releases/download/v2.0.51/sketchybar-app-font.ttf -o $HOME/Library/Fonts/sketchybar-app-font.ttf
   # SbarLua
   (git clone https://github.com/FelixKratz/SbarLua.git /tmp/SbarLua && cd /tmp/SbarLua/ && make install && rm -rf /tmp/SbarLua/)
-
-  info "Setting up macOS window management..."
 
   # Remind about accessibility permissions
   echo ""
@@ -390,13 +447,9 @@ setup_xdg_dirs() {
 }
 
 # -----------------------------------------------------------------------------
-# Offer to run macOS defaults (macOS only)
+# Offer to run macOS defaults
 # -----------------------------------------------------------------------------
 offer_macos_defaults() {
-  if [[ "$DOTFILES_MACHINE" != macos-* ]]; then
-    return 0
-  fi
-
   if [[ ! -f "$DOTFILES_DIR/scripts/macos-defaults.sh" ]]; then
     return 0
   fi
@@ -422,13 +475,20 @@ offer_macos_defaults() {
 # Post-install message
 # -----------------------------------------------------------------------------
 post_install() {
+  # Create installation marker
+  date +%Y-%m-%d > "$INSTALL_MARKER"
+
   echo ""
   echo -e "${GREEN}════════════════════════════════════════${NC}"
   echo -e "${GREEN}  Installation complete!${NC}"
   echo -e "${GREEN}════════════════════════════════════════${NC}"
   echo ""
-  echo "Machine profile: $DOTFILES_MACHINE"
-  echo ""
+
+  # Show install/update status
+  if [[ -f "$INSTALL_MARKER" ]]; then
+    echo "Last installed: $(cat "$INSTALL_MARKER")"
+    echo ""
+  fi
 
   # Mention backups if they were created
   if [[ -d "$BACKUP_DIR" ]]; then
@@ -459,15 +519,19 @@ post_install() {
 main() {
   echo ""
   echo -e "${BLUE}════════════════════════════════════════${NC}"
-  echo -e "${BLUE}  Dotfiles Installation${NC}"
+  echo -e "${BLUE}  macOS Dotfiles Installation${NC}"
   echo -e "${BLUE}════════════════════════════════════════${NC}"
   echo ""
 
-  setup_machine_profile
+  # Prerequisites (idempotent)
+  install_xcode_cli
+  install_homebrew
+  install_gh
+  auth_github
+
+  # Setup
   setup_xdg_dirs
-
   install_brew_packages
-
   stow_packages
   setup_macos_wm
   setup_git_config
@@ -475,6 +539,7 @@ main() {
   setup_1password
   set_default_shell
   offer_macos_defaults
+
   post_install
 }
 

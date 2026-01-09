@@ -13,6 +13,16 @@
 export PATH="$HOME/.local/bin:$PATH"
 
 # -----------------------------------------------------------------------------
+# Homebrew
+# -----------------------------------------------------------------------------
+
+if [[ -f /opt/homebrew/bin/brew ]]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [[ -f /usr/local/bin/brew ]]; then
+    eval "$(/usr/local/bin/brew shellenv)"
+fi
+
+# -----------------------------------------------------------------------------
 # Development tools
 # -----------------------------------------------------------------------------
 
@@ -56,9 +66,9 @@ if [[ -f "$HOME/.sdkman/bin/sdkman-init.sh" ]]; then
     source "$HOME/.sdkman/bin/sdkman-init.sh"
 fi
 
-# Android SDK (Linux location - macOS handled in path.macos.zsh)
-if [[ -d "$HOME/Android/Sdk" ]]; then
-    export ANDROID_HOME="$HOME/Android/Sdk"
+# Android SDK (macOS location)
+if [[ -d "$HOME/Library/Android/sdk" ]]; then
+    export ANDROID_HOME="$HOME/Library/Android/sdk"
     export PATH="$ANDROID_HOME/platform-tools:$ANDROID_HOME/tools:$PATH"
 fi
 

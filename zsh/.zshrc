@@ -15,11 +15,6 @@ export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_CACHE_HOME="$HOME/.cache"
 
-# Load machine profile if saved
-if [[ -f "$HOME/.dotfiles-machine" ]]; then
-    export DOTFILES_MACHINE=$(cat "$HOME/.dotfiles-machine")
-fi
-
 # Add local bin to path
 export PATH="$HOME/.local/bin:$PATH"
 
@@ -27,38 +22,10 @@ export PATH="$HOME/.local/bin:$PATH"
 # Load modular configuration
 # -----------------------------------------------------------------------------
 
-# Source all .zsh files, handling OS-specific variants
+# Source all .zsh files
 for config_file in "$HOME"/.zsh/*.zsh; do
-    [[ -f "$config_file" ]] || continue
-
-    case "$config_file" in
-        *.macos.zsh)
-            [[ "$OSTYPE" == darwin* ]] && source "$config_file"
-            ;;
-        *.linux.zsh)
-            [[ "$OSTYPE" == linux* ]] && source "$config_file"
-            ;;
-        *)
-            source "$config_file"
-            ;;
-    esac
+    [[ -f "$config_file" ]] && source "$config_file"
 done
-
-# -----------------------------------------------------------------------------
-# Machine-specific configuration
-# -----------------------------------------------------------------------------
-
-case "$DOTFILES_MACHINE" in
-    macos-work)
-        [[ -f "$HOME/.zsh/work.zsh" ]] && source "$HOME/.zsh/work.zsh"
-        ;;
-    macos-personal)
-        [[ -f "$HOME/.zsh/personal.zsh" ]] && source "$HOME/.zsh/personal.zsh"
-        ;;
-    linux)
-        [[ -f "$HOME/.zsh/linux.zsh" ]] && source "$HOME/.zsh/linux.zsh"
-        ;;
-esac
 
 # -----------------------------------------------------------------------------
 # Local overrides (machine-specific, not tracked in git)
