@@ -9,7 +9,7 @@
 
 tap "homebrew/bundle"           # Brewfile support
 tap "homebrew/cask-fonts"       # Nerd fonts and other fonts
-tap "FelixKratz/formulae"
+tap "FelixKratz/formulae"       # Sketchybar and related tools
 
 # -----------------------------------------------------------------------------
 # CLI Tools - Core

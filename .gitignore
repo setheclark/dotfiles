@@ -11,6 +11,11 @@
 *.local.*
 !*.local.example
 
+# Environment files with secrets
+.env
+.env.*
+!.env.example
+
 # Machine profile marker
 .dotfiles-machine
 
