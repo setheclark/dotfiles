@@ -11,8 +11,8 @@ options=(
   style=round
   width=5.0
   hidpi=on
-  active_color=glow(0xffa6d189)
-  inactive_color=0xff303446
+  active_color='glow(0xffef9f76)'
+  inactive_color=0xff414559
 )
 
 # Start borders with options
