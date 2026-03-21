@@ -1,4 +1,61 @@
 {
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
+    "DISABLE_AUTOUPDATER": "1",
+    "ENABLE_TOOL_SEARCH": "true"
+  },
+  "permissions": {
+    "allow": [
+      "Read",
+      "Write",
+      "Edit",
+      "Glob",
+      "Grep",
+      "Task",
+      "TodoWrite",
+      "WebFetch",
+      "WebSearch",
+      "NotebookEdit",
+      "NotebookRead",
+      "AskUserQuestion",
+      "Skill",
+      "SlashCommand",
+      "BashOutput",
+      "KillShell",
+      "mcp__playwright__*",
+      "mcp__chrome-devtools__*"
+    ],
+    "deny": [
+      "Bash(sudo *)",
+      "Bash(mkfs *)",
+      "Bash(dd *)",
+      "Edit(~/.ssh/**)",
+      "Read(**/.env*)",
+      "Read(**/*.pem)",
+      "Read(**/*.key)",
+      "Read(**/secrets/**)",
+      "Read(**/credentials/**)",
+      "Read(~/.ssh/**)",
+      "Read(~/.gnupg/**)",
+      "Read(~/.aws/**)",
+      "Read(~/.azure/**)",
+      "Read(~/.config/gh/**)",
+      "Read(~/.git-credentials)",
+      "Read(~/.docker/config.json)",
+      "Read(~/.kube/**)",
+      "Read(~/.npmrc)",
+      "Read(~/.npm/**)",
+      "Read(~/.pypirc)",
+      "Read(~/.gem/credentials)",
+      "Read(~/Library/Keychains/**)"
+    ],
+    "ask": [
+      "Bash(rm:*)",
+      "Edit(~/.bashrc)",
+      "Edit(~/.zshrc)"
+    ],
+    "defaultMode": "acceptEdits"
+  },
   "model": "sonnet",
   "hooks": {
     "Notification": [
@@ -21,5 +78,14 @@
         ]
       }
     ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "input=$(cat); cwd=$(echo \"$input\" | jq -r '.workspace.current_dir'); ctx=$(echo \"$input\" | jq -r '.context_window.remaining_percentage // empty'); dir=$(basename \"$cwd\"); pdir=$(dirname \"$cwd\"); if [ \"$pdir\" != \"/\" ] && [ \"$pdir\" != \"$HOME\" ]; then dir=\"$(basename \"$pdir\")/$dir\"; fi; git_info=\"\"; if cd \"$cwd\" 2>/dev/null && git rev-parse --git-dir >/dev/null 2>&1; then branch=$(git branch --show-current 2>/dev/null || git rev-parse --short HEAD 2>/dev/null); st=\"\"; git --no-optional-locks diff --quiet 2>/dev/null && git --no-optional-locks diff --cached --quiet 2>/dev/null || st=\"*\"; git_info=\" $branch$st\"; fi; lang=\"\"; [ -f \"$cwd/build.gradle.kts\" ] || [ -f \"$cwd/build.gradle\" ] && lang=\" \"; [ -f \"$cwd/package.json\" ] && lang=\" \"; time=$(date +%H:%M); ctxinfo=\"\"; [ -n \"$ctx\" ] && ctxinfo=\" $(printf %.0f $ctx)%\"; printf \"\\033[48;5;210;38;5;235m 󰀵 \\033[0m\\033[48;5;216;38;5;235m  %s \\033[0m\" \"$dir\"; [ -n \"$git_info\" ] && printf \"\\033[48;5;222;38;5;235m%s \\033[0m\" \"$git_info\"; [ -n \"$lang\" ] && printf \"\\033[48;5;150;38;5;235m%s\\033[0m\" \"$lang\"; printf \"\\033[48;5;183;38;5;235m  %s \\033[0m\" \"$time\"; [ -n \"$ctxinfo\" ] && printf \" \\033[38;5;183m%s\\033[0m\" \"$ctxinfo\"; echo",
+    "padding": 0
+  },
+  "enabledPlugins": {
+    "document-skills@anthropic-agent-skills": true,
+    "example-skills@anthropic-agent-skills": true
   }
 }

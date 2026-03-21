@@ -120,3 +120,6 @@ alias reload="exec $SHELL -l"
 
 # Show path entries on separate lines
 alias path='echo $PATH | tr ":" "\n"'
+
+alias h=history
+alias p=pwd

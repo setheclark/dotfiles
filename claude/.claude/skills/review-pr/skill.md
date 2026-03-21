@@ -3,7 +3,7 @@
 ## Metadata
 - **Name**: review-pr
 - **Description**: Comprehensively review GitHub pull requests with enriched context from Jira tickets, Figma designs, Sentry errors, and project best practices
-- **Version**: 1.0.0
+- **Version**: 1.1.0
 - **Author**: PR Review Skill
 
 ## Usage
@@ -190,6 +190,35 @@ gh pr view <pr-number> --json title,body,author,createdAt,state,files,commits,re
 gh pr diff <pr-number>
 ```
 
+### Step 5.5: Read All Changed Files
+
+**CRITICAL**: Before analyzing or commenting, read ALL changed files in their entirety to understand full context.
+
+**For remote reviews (no checkout):**
+- For files that exist in the current branch: Use Read tool to see "before" state
+- For new files being added: Extract the full content from the diff
+- Understand what code already exists vs what's being added/modified
+
+**For worktree reviews:**
+- Use Read tool to read all changed files directly from the worktree
+
+**Important verification before ANY comment:**
+- ❌ **NEVER** comment based only on diff snippets
+- ✅ **ALWAYS** verify by reading the complete file
+- ✅ Check if documentation/features exist elsewhere in the file
+- ✅ Understand the full context around changes
+- ✅ Verify related code not shown in the diff
+
+**Example of what NOT to do:**
+- Seeing a function in a diff and assuming it lacks documentation
+- Suggesting adding something that already exists outside the diff context
+- Commenting on line numbers without reading surrounding code
+
+**Example of what TO do:**
+- Read the entire file containing the changed code
+- Verify assumptions by checking actual file content
+- Only comment on issues you can confirm exist after reading full files
+
 ### Step 6: Extract External References
 
 Parse the PR body, commit messages, and branch name for:
@@ -257,6 +286,15 @@ Query strategy:
 Graceful degradation: If Sentry MCP is not configured or fails, skip this section.
 
 ### Step 8: Analyze the Code
+
+**BEFORE making ANY comment, you MUST:**
+1. ✅ Read the complete file containing the code you're commenting on
+2. ✅ Verify the issue actually exists (not already documented/handled)
+3. ✅ Confirm it's not addressed elsewhere in the file or related files
+4. ✅ For Concise mode: Confirm it's truly critical, not just a suggestion
+5. ✅ Can point to exact line numbers and quote the problematic code
+
+**If you cannot verify all 5 points above, DO NOT make that comment.**
 
 Based on the selected detail level and project best practices, analyze the PR with focus on:
 
@@ -504,10 +542,18 @@ _To submit this review:_
 ### Detail Level Adaptations
 
 **Concise Mode**:
-- Focus only on critical issues (bugs, security, breaking changes, project standard violations)
-- Keep comments brief (1-2 sentences)
-- Skip minor style/formatting suggestions
-- Aim for 5-10 key points maximum
+- **QUALITY OVER QUANTITY**: 2-3 high-confidence comments are better than 10 uncertain ones
+- **VERIFY EVERYTHING**: Only comment on issues you've personally verified exist by reading the files
+- **NO "Consider adding..." suggestions** unless you've confirmed it's actually missing
+- **Skip minor improvements** - Focus ONLY on:
+  - Bugs that will cause failures
+  - Security vulnerabilities
+  - Breaking changes
+  - Clear violations of project standards (verified in CONTRIBUTING.md)
+  - Logic errors that affect correctness
+- **When in doubt, don't comment** - Concise means high signal, zero noise
+- Keep comments brief (1-2 sentences) when you do comment
+- Aim for 2-5 key points maximum (not 5-10)
 
 **Detailed Mode**:
 - Include file paths and line numbers for every comment
@@ -524,6 +570,49 @@ _To submit this review:_
 - Strategic recommendations for improvement
 - Big-picture concerns only
 - Alignment with architectural docs/ADRs
+
+### Step 10.5: Review Quality Checklist
+
+**CRITICAL**: Before creating any comments on GitHub, verify each planned comment passes ALL checks below.
+
+**For EVERY comment you plan to make, ask yourself:**
+
+1. **Did I read the COMPLETE file?**
+   - ❌ NO: Do not make this comment - read the file first
+   - ✅ YES: Continue to next check
+
+2. **Can I point to the EXACT line where the problem exists?**
+   - ❌ NO: Do not make this comment - it's too vague
+   - ✅ YES: Continue to next check
+
+3. **Have I verified this isn't already handled elsewhere in the file?**
+   - ❌ NO: Do not make this comment - verify first
+   - ✅ YES: Continue to next check
+
+4. **Is this comment based on OBSERVATION, not ASSUMPTION?**
+   - ❌ NO: Do not make this comment - verify the facts
+   - ✅ YES: Continue to next check
+
+5. **For Concise mode: Is this truly CRITICAL?** (bugs, security, breaking changes, logic errors)
+   - ❌ NO: Do not make this comment in Concise mode
+   - ✅ YES: This comment can be included
+
+**Quality bar examples:**
+
+❌ **BAD Comment** (assumption-based):
+> "Consider adding KDoc to this function"
+> (Without reading the file to verify KDoc doesn't already exist)
+
+✅ **GOOD Comment** (observation-based):
+> "Line 47: This function processes user input without sanitization, which could lead to XSS. Consider using `sanitizeInput()` like the pattern in `UserController.kt:23`"
+> (After reading the file and confirming the issue exists)
+
+**If you answer "NO" to ANY question above, DELETE that comment.**
+
+**Final check before posting:**
+- How many comments do I have for Concise mode? (Should be 2-5 max)
+- Are ALL my comments about critical issues? (No "nice to have" suggestions)
+- Did I read every file I'm commenting on?
 
 ### Step 11: Create GitHub Draft Review (Preferred)
 
@@ -716,15 +805,18 @@ If linters or tests fail when running in worktree:
 
 ## Tips for Effective Reviews
 
-1. **Follow project standards**: Always reference CONTRIBUTING.md and project docs
-2. **Be constructive**: Phrase suggestions positively
-3. **Be specific**: Include file paths, line numbers, and examples
-4. **Prioritize**: Mark critical vs. nice-to-have improvements
-5. **Ask questions**: When unsure, ask for clarification rather than assuming
-6. **Acknowledge good work**: Note positive aspects of the PR
-7. **Focus on substance**: Avoid nitpicking formatting if auto-formatters handle it
-8. **Context matters**: Consider Jira requirements, Figma designs, and Sentry errors
-9. **Respect project culture**: Some teams prefer detailed reviews, others prefer high-level
+1. **Read files, not just diffs**: ALWAYS read complete files before commenting. Diffs only show snippets and can be misleading.
+2. **Verify before commenting**: Never assume - always verify that issues actually exist by reading the code.
+3. **Follow project standards**: Always reference CONTRIBUTING.md and project docs
+4. **Be constructive**: Phrase suggestions positively
+5. **Be specific**: Include file paths, line numbers, and examples
+6. **Prioritize**: Mark critical vs. nice-to-have improvements
+7. **Ask questions**: When unsure, ask for clarification rather than assuming
+8. **Acknowledge good work**: Note positive aspects of the PR
+9. **Focus on substance**: Avoid nitpicking formatting if auto-formatters handle it
+10. **Context matters**: Consider Jira requirements, Figma designs, and Sentry errors
+11. **Respect project culture**: Some teams prefer detailed reviews, others prefer high-level
+12. **Quality over quantity**: In Concise mode, 2 high-confidence comments beat 10 uncertain suggestions
 
 ## Notes
 
