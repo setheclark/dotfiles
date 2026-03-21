@@ -75,6 +75,19 @@ if command -v lazygit &>/dev/null; then
 fi
 
 # -----------------------------------------------------------------------------
+# Rust / Cargo
+# -----------------------------------------------------------------------------
+
+alias cb="cargo build"
+alias cbr="cargo build --release"
+alias ct="cargo test"
+alias cr="cargo run"
+alias crr="cargo run --release"
+alias cc="cargo check"
+alias ccl="cargo clippy"
+alias cfmt="cargo fmt"
+
+# -----------------------------------------------------------------------------
 # Editor
 # -----------------------------------------------------------------------------
 

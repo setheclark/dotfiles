@@ -233,6 +233,28 @@ stow_packages() {
 }
 
 # -----------------------------------------------------------------------------
+# Setup Rust toolchain via rustup
+# -----------------------------------------------------------------------------
+setup_rust() {
+  info "Setting up Rust toolchain..."
+
+  if command -v rustc &>/dev/null || [[ -f "$HOME/.cargo/bin/rustc" ]]; then
+    success "Rust toolchain already installed, skipping"
+    return 0
+  fi
+
+  if ! command -v rustup-init &>/dev/null; then
+    warn "rustup-init not found (install via Brewfile), skipping Rust setup"
+    return 0
+  fi
+
+  rustup-init -y --no-modify-path
+  source "$HOME/.cargo/env"
+  rustup component add rustfmt clippy
+  success "Rust toolchain installed"
+}
+
+# -----------------------------------------------------------------------------
 # Setup macOS window management tools
 # -----------------------------------------------------------------------------
 setup_macos_wm() {
@@ -536,6 +558,7 @@ main() {
   setup_xdg_dirs
   install_brew_packages
   stow_packages
+  setup_rust
   setup_macos_wm
   setup_git_config
   setup_local_files

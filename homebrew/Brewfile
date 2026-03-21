@@ -85,7 +85,7 @@ brew "imagemagick"              # Image manipulation tools
 brew "python"                   # Python 3 (latest stable)
 brew "node"                     # Node.js JavaScript runtime
 brew "go"                       # Go programming language
-brew "rust"                     # Rust programming language
+brew "rustup"                   # Rust toolchain manager (installs rustc, cargo via rustup-init)
 brew "kotlin"                   # Kotlin programming language
 brew "gradle"                   # Build automation tool (for Kotlin/Java)
 
