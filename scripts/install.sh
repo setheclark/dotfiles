@@ -241,6 +241,7 @@ setup_macos_wm() {
   # Sketchybar setup
   curl -L https://github.com/kvndrsslr/sketchybar-app-font/releases/download/v2.0.51/sketchybar-app-font.ttf -o $HOME/Library/Fonts/sketchybar-app-font.ttf
   # SbarLua
+  rm -rf /tmp/SbarLua
   (git clone https://github.com/FelixKratz/SbarLua.git /tmp/SbarLua && cd /tmp/SbarLua/ && make install && rm -rf /tmp/SbarLua/)
 
   # Remind about accessibility permissions
@@ -347,8 +348,9 @@ setup_git_work_config() {
 EOF
   success "Created ~/.gitconfig.work with work email"
 
-  # Add conditional includes to .gitconfig.local
-  cat >>"$HOME/.gitconfig.local" <<EOF
+  # Add conditional includes to .gitconfig.local (guard against duplicates)
+  if ! grep -qF "gitconfig.work" "$HOME/.gitconfig.local"; then
+    cat >>"$HOME/.gitconfig.local" <<EOF
 
 # -----------------------------------------------------------------------------
 # Work repository configuration
@@ -363,6 +365,7 @@ EOF
 [includeIf "hasconfig:remote.*.url:https://github.com/$company_name/**"]
     path = ~/.gitconfig.work
 EOF
+  fi
 
   success "Configured conditional work identity for $company_name repos"
   echo ""

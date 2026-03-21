@@ -32,12 +32,3 @@ done
 # -----------------------------------------------------------------------------
 
 [[ -f "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"
-
-# bun completions
-[ -s "/Users/sethclark/.bun/_bun" ] && source "/Users/sethclark/.bun/_bun"
-
-# bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
-
-source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
