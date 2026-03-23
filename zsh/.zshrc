@@ -32,3 +32,10 @@ done
 # -----------------------------------------------------------------------------
 
 [[ -f "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"
+
+if command -v wt >/dev/null 2>&1; then eval "$(command wt config shell init zsh)"; fi
+
+# >>> gohan setup, do not edit this section <<<
+# !! Contents within this block are managed by gohan !!
+[ -f "/Users/sethclark/.config/gohan/gohan.sh" ] && source "/Users/sethclark/.config/gohan/gohan.sh"
+# <<< gohan setup end <<<

@@ -42,8 +42,171 @@ All themeable tools use [Catppuccin Frappe](https://github.com/catppuccin/catppu
 - delta (git diffs)
 - lazygit
 - fzf
+- tmux (status bar)
 
 When adding new tools, prefer Catppuccin Frappe if a theme is available.
+
+## Keybindings
+
+### tmux
+
+Prefix key: `Ctrl+a`
+
+After first launch, press `Ctrl+a I` to install plugins.
+
+**Panes**
+
+| Key | Action |
+|-----|--------|
+| `Prefix + \|` | Split horizontally |
+| `Prefix + -` | Split vertically |
+| `Prefix + h/j/k/l` | Navigate panes (vim-style) |
+| `Prefix + H/J/K/L` | Resize pane (repeatable) |
+
+**Windows**
+
+| Key | Action |
+|-----|--------|
+| `Prefix + c` | New window |
+| `Prefix + 1-9` | Switch to window N |
+| `Prefix + ,` | Rename window |
+| `Prefix + n/p` | Next/previous window |
+
+**Copy mode** (vi-style)
+
+| Key | Action |
+|-----|--------|
+| `Prefix + [` | Enter copy mode |
+| `v` | Begin selection |
+| `y` | Yank to system clipboard |
+| `Esc` | Cancel |
+
+**General**
+
+| Key | Action |
+|-----|--------|
+| `Prefix + r` | Reload config |
+| `Prefix + d` | Detach session |
+| `Prefix + s` | List sessions |
+| `Prefix + I` | Install plugins (TPM) |
+| `Prefix + U` | Update plugins (TPM) |
+
+---
+
+### AeroSpace (Window Manager)
+
+**Window focus**
+
+| Key | Action |
+|-----|--------|
+| `Alt + h/j/k/l` | Focus window left/down/up/right |
+| `Alt + Tab` | Toggle last workspace |
+
+**Window movement**
+
+| Key | Action |
+|-----|--------|
+| `Alt + Shift + h/j/k/l` | Move window left/down/up/right |
+| `Alt + Shift + Tab` | Move workspace to next monitor |
+
+**Workspaces**
+
+| Key | Action |
+|-----|--------|
+| `Alt + 1-9` | Switch to workspace N |
+| `Alt + Shift + 1-9` | Move window to workspace N |
+
+**Layout**
+
+| Key | Action |
+|-----|--------|
+| `Alt + /` | Cycle: tiles → horizontal → vertical |
+| `Alt + ,` | Toggle accordion layout |
+| `Alt + -` | Resize smart -50 |
+| `Alt + =` | Resize smart +50 |
+
+**Service mode** (`Alt + Shift + ;`)
+
+| Key | Action |
+|-----|--------|
+| `Esc` | Reload config and exit service mode |
+| `r` | Flatten workspace tree (reset layout) |
+| `f` | Toggle floating/tiling |
+| `Backspace` | Close all windows except current |
+| `Alt + Shift + h/j/k/l` | Join window with neighbour |
+
+---
+
+### Karabiner (Keyboard Remapping)
+
+| Key | Maps to | Notes |
+|-----|---------|-------|
+| `Caps Lock` (tap) | `Escape` | |
+| `Caps Lock` (hold) | Hyper (`Shift+Ctrl+Option+Cmd`) | |
+| `Hyper + h/j/k/l` | Arrow keys | Vim-style navigation everywhere |
+| `Hyper + w/b` | `Option+Right` / `Option+Left` | Word forward/backward |
+| `Hyper + u/d` | Page Up / Page Down | |
+| `Hyper + 0` | `Cmd+Left` (Home) | |
+| `Hyper + $` | `Cmd+Right` (End) | |
+
+---
+
+### Zellij (Terminal Workspace)
+
+Zellij uses modal bindings. Each mode is entered with a `Ctrl+<key>` chord.
+
+**Mode entry shortcuts**
+
+| Key | Mode |
+|-----|------|
+| `Ctrl + p` | Pane mode |
+| `Ctrl + t` | Tab mode |
+| `Ctrl + n` | Resize mode |
+| `Ctrl + h` | Move mode |
+| `Ctrl + s` | Scroll/search mode |
+| `Ctrl + o` | Session mode |
+| `Ctrl + g` | Lock mode |
+| `Ctrl + q` | Quit |
+
+**Global shortcuts** (most modes)
+
+| Key | Action |
+|-----|--------|
+| `Alt + h/j/k/l` | Move pane focus |
+| `Alt + n` | New pane |
+| `Alt + f` | Toggle floating panes |
+| `Alt + i/o` | Move tab left/right |
+
+**Pane mode** (`Ctrl+p`)
+
+| Key | Action |
+|-----|--------|
+| `h/j/k/l` | Focus pane (vim-style) |
+| `n` | New pane |
+| `r` | New pane to the right |
+| `d` | New pane down |
+| `f` | Toggle fullscreen |
+| `e` | Toggle embed/floating |
+| `z` | Toggle pane frames |
+| `x` | Close pane |
+
+**Tab mode** (`Ctrl+t`)
+
+| Key | Action |
+|-----|--------|
+| `n` | New tab |
+| `r` | Rename tab |
+| `1-9` | Go to tab N |
+| `x` | Close tab |
+
+**Scroll mode** (`Ctrl+s`)
+
+| Key | Action |
+|-----|--------|
+| `j/k` | Scroll down/up |
+| `u/d` | Half-page scroll |
+| `s` | Enter search |
+| `e` | Edit scrollback in `$EDITOR` |
 
 ## Structure
 
@@ -60,6 +223,8 @@ dotfiles/
 │   └── .config/git/ignore
 ├── nvim/                     # Neovim configuration
 │   └── .config/nvim/init.lua
+├── tmux/                     # tmux configuration
+│   └── .config/tmux/tmux.conf
 ├── starship/                 # Starship prompt
 │   └── .config/starship.toml
 ├── bat/                      # bat configuration
@@ -68,6 +233,12 @@ dotfiles/
 │   └── .config/lazygit/config.yml
 ├── ghostty/                  # Ghostty terminal emulator
 │   └── .config/ghostty/config
+├── aerospace/                # AeroSpace window manager
+│   └── .config/aerospace/aerospace.toml
+├── karabiner/                # Karabiner keyboard remapping
+│   └── .config/karabiner/
+├── zellij/                   # Zellij terminal workspace
+│   └── .config/zellij/
 ├── ssh/                      # SSH configuration
 │   └── .ssh/
 │       ├── config
@@ -202,6 +373,10 @@ stow -v --no --target=$HOME zsh
 | [zoxide](https://github.com/ajeetdsouza/zoxide) | Smarter cd |
 | [delta](https://github.com/dandavison/delta) | Better git diffs |
 | [lazygit](https://github.com/jesseduffield/lazygit) | Terminal UI for git |
+| [tmux](https://github.com/tmux/tmux) | Terminal multiplexer |
+| [zellij](https://zellij.dev/) | Terminal workspace |
+| [AeroSpace](https://github.com/nikitabobko/AeroSpace) | Tiling window manager |
+| [Karabiner-Elements](https://karabiner-elements.pqrs.org/) | Keyboard remapping |
 
 ## License
 

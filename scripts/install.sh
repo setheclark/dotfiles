@@ -197,6 +197,7 @@ stow_packages() {
     "bat"
     "lazygit"
     "ghostty"
+    "tmux"
     "zellij"
     "claude"
     "claude-code-notifier"
@@ -230,6 +231,22 @@ stow_packages() {
     echo "  $BACKUP_DIR"
     echo ""
   fi
+}
+
+# -----------------------------------------------------------------------------
+# Setup tmux plugin manager (TPM)
+# -----------------------------------------------------------------------------
+setup_tpm() {
+  local tpm_dir="$HOME/.tmux/plugins/tpm"
+
+  if [ -d "$tpm_dir" ]; then
+    success "TPM (tmux plugin manager) already installed"
+    return 0
+  fi
+
+  info "Installing TPM (tmux plugin manager)..."
+  git clone https://github.com/tmux-plugins/tpm "$tpm_dir"
+  success "TPM installed — open tmux and press prefix + I to install plugins"
 }
 
 # -----------------------------------------------------------------------------
@@ -558,6 +575,7 @@ main() {
   setup_xdg_dirs
   install_brew_packages
   stow_packages
+  setup_tpm
   setup_rust
   setup_macos_wm
   setup_git_config

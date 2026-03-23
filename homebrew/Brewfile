@@ -58,6 +58,7 @@ brew "curl"                     # HTTP client (newer than system curl)
 brew "wget"                     # Download files from the web
 brew "tree"                     # Display directory tree structure
 brew "watch"                    # Run commands periodically
+brew "tmux"                      # Terminal multiplexer
 brew "zellij"                   # Pluggable terminal workspace, with terminal multiplexer as the base feature
 brew "lazygit"                  # Terminal UI for git commands
 brew "pre-commit"               # Git hook framework
