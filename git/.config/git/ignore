@@ -132,3 +132,11 @@ temp/
 *.orig
 
 **/.claude/settings.local.json
+
+# -----------------------------------------------------------------------------
+# Worktrees
+# -----------------------------------------------------------------------------
+
+# wt (worktrunk) and PR review worktree directories
+.worktrees/
+**/.worktrees/
