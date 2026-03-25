@@ -1,0 +1,32 @@
+# =============================================================================
+# Worktrunk configuration
+# https://worktrunk.dev/config/#user-configuration
+# =============================================================================
+
+# Where new worktrees are created, relative to the repo root.
+# Variables: {{ repo_path }}, {{ branch }}, {{ branch | sanitize }}
+worktree-path = ".worktrees/{{ branch | sanitize }}"
+
+[commit.generation]
+# Runs via shell; prompt piped to stdin, output becomes the commit message.
+# CLAUDECODE= unsets the nesting guard so `claude -p` works inside a Claude Code session.
+command = "CLAUDECODE= MAX_THINKING_TOKENS=0 claude -p --no-session-persistence --model=haiku --tools='' --disable-slash-commands --system-prompt=''"
+
+[list]
+# Generate one-line LLM branch summaries in `wt switch` and `wt list --full`.
+# Results are cached until the diff changes.
+summary = true
+
+[merge]
+# squash = false
+# remove = true
+
+[switch]
+# Behavior when switching worktrees
+
+[pre-switch]
+# Fast-forward the default branch from remote before creating/switching worktrees,
+# so new worktrees always start from the latest upstream state.
+# Uses fetch branch:branch for a safe non-checkout fast-forward; errors are ignored
+# (offline, diverged, etc.) so the switch is never blocked.
+# sync = "git fetch {{ remote }} {{ default_branch }}:{{ default_branch }} 2>/dev/null || true"
