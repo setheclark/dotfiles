@@ -13,6 +13,10 @@ All changes made to this repository must result in **idempotent behavior**. Scri
 - **Package managers / tool installs**: Wrap installs with existence checks (e.g., `command -v foo || brew install foo`).
 - **File writes**: Prefer idempotent config formats (TOML, YAML, symlinks) over scripts that append to files.
 
+## Commit Messages
+
+Do not include AI attribution lines (e.g. `Co-Authored-By: Claude ...`) in commit messages.
+
 ### Checklist before committing
 
 - [ ] Can the install/setup script be run twice on a clean system without error?
