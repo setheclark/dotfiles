@@ -4,6 +4,9 @@
 # Theme: Catppuccin Frappe
 # =============================================================================
 
+# Allow more time for directory scanning (default 30ms is too aggressive)
+scan_timeout = 100
+
 format = """
 [](red)\
 $os\

@@ -52,6 +52,15 @@
 
 [merge]
     conflictstyle = diff3
+    tool = intellij
+
+[mergetool]
+    prompt = false
+    keepBackup = false
+
+[mergetool "intellij"]
+    cmd = idea merge \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"
+    trustExitCode = true
 
 # Delta configuration (better diffs) - Catppuccin Frappe theme
 [delta]

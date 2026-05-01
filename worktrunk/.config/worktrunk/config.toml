@@ -30,3 +30,5 @@ summary = true
 # Uses fetch branch:branch for a safe non-checkout fast-forward; errors are ignored
 # (offline, diverged, etc.) so the switch is never blocked.
 # sync = "git fetch {{ remote }} {{ default_branch }}:{{ default_branch }} 2>/dev/null || true"
+
+# worktree-path = "~/worktrees/{{ repo }}/{{ branch | sanitize }}"

@@ -106,9 +106,9 @@ alias dotsedit="nvim $DOTFILES_DIR"
 # Safety nets
 # -----------------------------------------------------------------------------
 
-alias rm="rm -i"
-alias mv="mv -i"
-alias cp="cp -i"
+# alias rm="rm -i"
+# alias mv="mv -i"
+# alias cp="cp -i"
 
 # -----------------------------------------------------------------------------
 # Network
