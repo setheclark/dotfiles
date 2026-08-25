@@ -62,7 +62,14 @@ alias gs="git status"
 alias ga="git add"
 alias gc="git commit"
 alias gp="git push"
-alias gl="git pull"
+# Repo-aware pull: keep shallow repos shallow, everything else normal
+gl() {
+    if [[ "$(git rev-parse --is-shallow-repository 2>/dev/null)" == "true" ]]; then
+        git pull --depth=1 "$@"
+    else
+        git pull "$@"
+    fi
+}
 alias gd="git diff"
 alias gco="git checkout"
 alias gb="git branch"
