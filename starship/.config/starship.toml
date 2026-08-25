@@ -7,6 +7,9 @@
 # Allow more time for directory scanning (default 30ms is too aggressive)
 scan_timeout = 100
 
+# Allow more time for commands like `git` in large repos (default 500ms)
+command_timeout = 2000
+
 format = """
 [](red)\
 $os\

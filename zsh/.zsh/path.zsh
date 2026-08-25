@@ -56,6 +56,17 @@ if [[ -f "$HOME/.sdkman/bin/sdkman-init.sh" ]]; then
     source "$HOME/.sdkman/bin/sdkman-init.sh"
 fi
 
+# Java default: JDK 21 (override SDKMAN/system default if available).
+# Use `jdk` to switch interactively in a shell.
+if [[ -x "/usr/libexec/java_home" ]]; then
+    _java_default="$(/usr/libexec/java_home -v 21 2>/dev/null)"
+    if [[ -n "$_java_default" ]]; then
+        export JAVA_HOME="$_java_default"
+        export PATH="$JAVA_HOME/bin:$PATH"
+    fi
+    unset _java_default
+fi
+
 # Android SDK (macOS location)
 if [[ -d "$HOME/Library/Android/sdk" ]]; then
     export ANDROID_HOME="$HOME/Library/Android/sdk"

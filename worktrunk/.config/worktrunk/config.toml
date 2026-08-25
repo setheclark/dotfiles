@@ -5,7 +5,7 @@
 
 # Where new worktrees are created, relative to the repo root.
 # Variables: {{ repo_path }}, {{ branch }}, {{ branch | sanitize }}
-worktree-path = ".worktrees/{{ branch | sanitize }}"
+worktree-path = "{{ repo_path }}/../worktrees/{{ repo }}.{{ branch | sanitize }}"
 
 [commit.generation]
 # Runs via shell; prompt piped to stdin, output becomes the commit message.
@@ -30,5 +30,3 @@ summary = true
 # Uses fetch branch:branch for a safe non-checkout fast-forward; errors are ignored
 # (offline, diverged, etc.) so the switch is never blocked.
 # sync = "git fetch {{ remote }} {{ default_branch }}:{{ default_branch }} 2>/dev/null || true"
-
-# worktree-path = "~/worktrees/{{ repo }}/{{ branch | sanitize }}"
